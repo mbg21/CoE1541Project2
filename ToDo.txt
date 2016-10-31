@@ -1,0 +1,11 @@
+CoE1541 Project 2 To Do
+
+by Wednesday at noon:
+
+Max:
+• study caches & understand HTF they work
+• build function to read cache_config.txt file
+
+Andrew:
+• sketch algorithm of cache_access function
+
