@@ -52,6 +52,93 @@ struct cache_t *
 int cache_access(struct cache_t *cp, unsigned long address, 
 			 char access_type, unsigned long long now, struct cache_t *next_cp)
 {
+  
+  // Check the associtivity of the configuration based on text configuration
+  
+  
+  // case 1: 1 way associtivity
+  
+    // Get the size of the cache (from config file)
+    // Turn block size into bytes (2^X) (from config file)
+    // Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+    
+    // index = address mod block size
+    // tag = 32 - Z - X
+ 
+    // Go to index in cache AND check for tag
+        
+    // if tag found: 
+       // hit --> L1 hit_counter++
+      
+    // if tag is NOT present:
+      // miss in L1 --> L1 miss_counter++
+    
+      // check for presence of L2 cache: 
+        // if there is L2 cache, go to it --> CPI + L2 access time
+          // check the index in the L2 and see if tag is found
+            // if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+            // if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++   
+            
+        // if there is NO L2 cache: 
+          // determine LRU to replace and replace
+        
+        
+        
+    // case 2: 4 way associtivity
+  
+      // Get the size of the cache (from config file)
+      // Turn block size into bytes (2^X) (from config file)
+      // Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+      
+      // index = address mod block size
+      // tag = 32 - Z - X
+     
+      // go to index in cache AND search each 'way' for the tag (4 ways)
+      
+      // if tag is present:  
+         // hit --> L1 hit_counter++
+        
+      // if tag is NOT present:
+        // miss --> L1 miss_counter++; 
+      
+        // check for presence of L2 cache: 
+          // if there is L2 cache, go to it --> CPI + L2 access time
+            // check the index in the L2 and see if tag is found in a 'way'
+            // if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+            // if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++ 
+             
+          // if there is NO L2 cache: 
+           // determine LRU to replace and replace
+
+    
+  // case 3: 8 way associtivity
+  
+      // Get the size of the cache (from config file)
+      // Turn block size into bytes (2^X) (from config file)
+      // Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+      
+      // index = address mod block size
+      // tag = 32 - Z - X
+     
+      // go to index in cache AND search each 'way' for the tag (8 ways)
+      
+      // if tag is present:  
+         // hit --> L1 hit_counter++
+        
+      // if tag is NOT present: 
+        // miss --> L1 miss_counter++; 
+       
+        // check for presence of L2 cache: 
+          // if there is L2 cache, go to it --> CPI + L2 access time
+            // check the index in the L2 and see if tag is found in a 'way'
+            // if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+            // if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++
+            
+          // if there is NO L2 cache: 
+            // determine LRU to replace and replace
+ 
+
+           
   //
   // Based on address, determine the set to access in cp and examine the blocks
   // in the set to check hit/miss and update the golbal hit/miss statistics
