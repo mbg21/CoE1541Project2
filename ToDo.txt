@@ -4,7 +4,7 @@ by Wednesday at noon:
 
 Max:
 • study caches & understand HTF they work
-• build function to read cache_config.txt file
+✓ DONE build function to read cache_config.txt file
 
 Andrew:
 • sketch algorithm of cache_access function
