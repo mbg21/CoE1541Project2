@@ -71,13 +71,13 @@ cache_config_t* read_config_file () {
 	memset(line_buf, 0, CC_LINESIZE);
 	
 	if (CC_DEBUG) {
-		printf("         L1 size: %i B\n", configuration->size_L1);
+		printf("         L1 size: %i KiB\n", configuration->size_L1);
 		printf("      Block size: %i B\n", configuration->blocksize);
-		printf("L1 associativity: %i B\n", configuration->associativity_L1);
-		printf("         L2 size: %i B\n", configuration->size_L2);
-		printf("L2 associativity: %i B\n", configuration->associativity_L2);
+		printf("L1 associativity: %i \n", configuration->associativity_L1);
+		printf("         L2 size: %i KiB\n", configuration->size_L2);
+		printf("L2 associativity: %i \n", configuration->associativity_L2);
 		printf("  L2 access time: %i cycles\n", configuration->access_time_L2);
-		printf("  L2 access time: %i cycles\n", configuration->access_time_mem);
+		printf(" mem access time: %i cycles\n", configuration->access_time_mem);
 	}
 	
 	fclose(file_ptr);

@@ -1,11 +1,21 @@
 CoE1541 Project 2 To Do
 
-by Wednesday at noon:
+for Wednesday 11/2 at 12:00pm:
 
 Max:
-• study caches & understand HTF they work
+✓ IN PROGRESS study caches & understand HTF they work
 ✓ DONE build function to read cache_config.txt file
 
 Andrew:
 • sketch algorithm of cache_access function
 
+
+for Friday 11/4 at 6:00pm
+
+Max:
+• log2, index, & tag functions
+
+
+Andrew:
+• hit/miss function: test on static cases w/ pre-solved index+tag
+• L2check: false for intitial testing, need global variable of mem latency
