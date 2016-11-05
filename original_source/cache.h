@@ -22,17 +22,19 @@ struct cache_t {
   struct cache_blk_t **blocks;    // the array of cache blocks
 };
 
-struct cache_t *
-	cache_create(int size, int blocksize, int assoc, int latency)
+// function that returns a pointer to a cache with the given parameters
+struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
 {
+  
+  // REASSIGN THESE
   int i;
   int nblocks = 1;			// number of blocks in the cache
   int nsets = 1;			// number of sets (entries) in the cache
 
   // YOUR JOB: calculate the number of sets and blocks in the cache
-  //
-  // nblocks = X;
-  // nsets = Y;
+  
+//  nblocks = X;
+//  nsets = Y;
 
   struct cache_t *C = (struct cache_t *)calloc(1, sizeof(struct cache_t));
 		
@@ -47,6 +49,41 @@ struct cache_t *
 	}
 
   return C;
+}
+
+
+
+// Checks if a cache hits or misses at a given index for a given tag. 
+// This function returns 1 if its a hit, 0 if its a miss, or -1 is an error has occured. 
+int hit_or_miss(struct cache_t *cp, int index, unsigned long tag_2_cmp){
+  
+   // unsigned long cant be zero..
+   // so just check for max size error
+  if (index > cp->nsets - 1){
+    
+    printf("Index exceeds the number of blocks in the cache. Returning -1.");
+    return -1; // -1 means error...we should check for this
+    
+  }else{
+   
+    struct cache_blk_t* block = cp->blocks[index]; // get block from cache
+    unsigned long tag = block->tag; // get tag from cache
+    
+    // compare tags
+    if (tag == tag_2_cmp){ return 1; } // hit
+    else if (tag != tag_2_cmp){ return 0; } // miss
+    else { printf("Something went wrong. Returning -1"); return -1;}
+  
+    //printf("Tag at index %d: %lu\n", index, block->tag); 
+  }
+    
+}
+
+
+int has_L2_cache(struct cache_t){
+  
+  
+  
 }
 
 int cache_access(struct cache_t *cp, unsigned long address, 
