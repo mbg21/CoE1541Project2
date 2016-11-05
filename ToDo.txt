@@ -1,21 +1,32 @@
 CoE1541 Project 2 To Do
 
-for Wednesday 11/2 at 12:00pm:
+--for Wednesday 11/2 at 12:00pm:
 
 Max:
 ✓ IN PROGRESS study caches & understand HTF they work
 ✓ DONE build function to read cache_config.txt file
 
 Andrew:
-• sketch algorithm of cache_access function
+✓ DONE sketch algorithm of cache_access function
 
 
-for Friday 11/4 at 6:00pm
+--for Friday 11/4 at 6:00pm
 
 Max:
-• log2, index, & tag functions
-
+✓ IN PROGRESS log2, index, & tag functions
 
 Andrew:
-• hit/miss function: test on static cases w/ pre-solved index+tag
-• L2check: false for intitial testing, need global variable of mem latency
+✓ DONE? hit/miss function: test on static cases w/ pre-solved index+tag
+✓ DONE L2check: false for intitial testing, need global variable of mem latency
+
+
+--for Monday 11/7 at 6:00pm
+
+Max:
+• get index, tag functions working on static test cases from Homework 4 and Exam 1
+• get index, tag functions to parameterize from config struct
+
+Andrew:
+• preliminary integration for CacheSimulator (use static test cases from before)
+• outline read vs write scheme considerations
+

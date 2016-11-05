@@ -76,7 +76,7 @@ void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cach
 int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
     
   struct cache_blk_t* blocks = cp->blocks[index]; // get blocks from cache
-  struct cache_blk_t block_with_associativity;
+  struct cache_blk_t block_from_way;
   unsigned long tag; 
   int way; 
   int result; 
@@ -92,9 +92,9 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
      
     // search each way..
     for (way = 0; way < cp->assoc; way++){
-       block_with_associativity = blocks[way]; // get all the blocks from that index
-      
-       tag = block_with_associativity.tag; // get tag from cache
+       block_from_way = blocks[way]; // get all the blocks from that index
+            
+       tag = block_from_way.tag; // get tag from cache
     
       // compare tags
       if (tag == tag2cmp){ 
