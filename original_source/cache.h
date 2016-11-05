@@ -85,7 +85,7 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
    // so just check for max size error
   if (index > cp->nsets - 1){
     
-    printf("Index exceeds the number of blocks in the cache. Returning -1.\n");
+    printf("Index exceeds the number of sets in the cache. Returning -1.\n");
     return -1; // -1 means error...we should check for this
     
   }else{
@@ -98,16 +98,14 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
     
       // compare tags
       if (tag == tag2cmp){ 
+        
           result = 1; 
       
           if(DEBUG) {print_hit_or_miss(result, index, way, tag, tag2cmp ); } 
       
           return 1; // hit
-      
-      }else if (tag != tag2cmp){ int result = 0; 
-      
+      }else if (tag != tag2cmp){ 
           // go to next way
-          
       }else { printf("Something went wrong. Returning -1\n"); return -1;}
     }
     

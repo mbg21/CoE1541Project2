@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 	// Test 1: Access index greater than number of blocks
 		
 		index = 3; 
-		tag2cmp = 0; 
+		tag2cmp = 67; 
 		h = hit_or_miss(cache, index, tag2cmp); 
 	
 	// Test 2: Should return a hit..
@@ -37,12 +37,8 @@ int main(int argc, char *argv[]) {
 		h = hit_or_miss(cache, index, tag2cmp); 
 
 	// Test 5: Should be a hit
-	// nblks was changed in the caches
-//		cache = cache_create(1024, 2, 1, 100); 
-//		
-//		index = 1; 
-//		tag2cmp = 0;
-//		h = hit_or_miss(cache, index, tag2cmp); 
-//	    printf("%d\n", h); 
-	
+		cache = cache_create(1024, 2, 1, 100); // nblks 2
+		index = 1; 
+		tag2cmp = 0;
+		h = hit_or_miss(cache, index, tag2cmp); 
 }
