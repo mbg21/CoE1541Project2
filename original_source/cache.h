@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "../CacheConfigurator/CacheConfigurator.h"
 
 #define DEBUG 1
 
@@ -17,17 +18,27 @@ struct cache_t {
 	// The cache is represented by a 2-D array of blocks. 
 	// The first dimension of the 2D array is "nsets" which is the number of sets (entries)
 	// The second dimension is "assoc", which is the number of blocks in each set.
-  int nsets;				// # sets
+  int nsets;				// # setss
   int blocksize;			// block size
   int assoc;				// associativity
   int hit_latency;			// latency in case of a hit
   struct cache_blk_t **blocks;    // the array of cache blocks
+  
+  struct cache_t* L2_cache; // FIX ME: We should assign this to a cache_t struct if the config files says so..
 };
+
+// Creates an L2 cache if the configuration file specifies one. 
+// Returns the newly craeted L2 cache if one is specified or NULL if there is no L2 cache or if some error occured. 
+int should_create_L2_cache(struct cache_config_t* cache_config){
+  
+  if (cache_config->size_L2 == 0){ return 0; } // there is no L2 cache
+  else if (cache_config->size_L2 > 0 ){ return 1; } // we should create an L2 cache
+  else { if (DEBUG){ printf("Something weird happened\n"); } return -1; }
+}
 
 // function that returns a pointer to a cache with the given parameters
 struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
 {
-  
   // REASSIGN THESE
   int i;
   int nblocks = 1;			// number of blocks in the cache
@@ -53,36 +64,56 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
   return C;
 }
 
-void print_hit_or_miss(int hit_or_miss_i, int index, unsigned long cache_tag, unsigned long tag2cmp){
+void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cache_tag, unsigned long tag2cmp){
   
-  if (hit_or_miss_i == 1){printf("Hit---Index:%i---Tag in Cache:%lu---Tag to Compare:%lu", index, cache_tag, tag2cmp); }
-  else if (hit_or_miss_i == 0){ printf("Miss---Index:%i---Tag in Cache:%lu---Tag to Compare:%lu", index, cache_tag, tag2cmp); }
+  if (hit_or_miss_i == 1){printf("Hit!\tIndex:%d\t\tWay:%d\tTag in Cache:%lu\tTag to Compare:%lu\n", index, way, cache_tag, tag2cmp); }
+  else if (hit_or_miss_i == 0){ printf("Miss!\tIndex:%d\tTag in Cache:%lu\tTag to Compare:%lu\n", index, cache_tag, tag2cmp); }
   else { printf("Neither hit or miss. This shouldn't happen."); }
 }
-
-
 
 // Checks if a cache hits or misses at a given index for a given tag. 
 // This function returns 1 if its a hit, 0 if its a miss, or -1 is an error has occured. 
 int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
+    
+  struct cache_blk_t* blocks = cp->blocks[index]; // get blocks from cache
+  struct cache_blk_t block_with_associativity;
+  unsigned long tag; 
+  int way; 
+  int result; 
   
    // unsigned long cant be zero..
    // so just check for max size error
   if (index > cp->nsets - 1){
     
-    printf("Index exceeds the number of blocks in the cache. Returning -1.");
+    printf("Index exceeds the number of blocks in the cache. Returning -1.\n");
     return -1; // -1 means error...we should check for this
     
   }else{
-   
-    struct cache_blk_t* block = cp->blocks[index]; // get block from cache
-    unsigned long tag = block->tag; // get tag from cache
+     
+    // search each way..
+    for (way = 0; way < cp->assoc; way++){
+       block_with_associativity = blocks[way]; // get all the blocks from that index
+      
+       tag = block_with_associativity.tag; // get tag from cache
     
-    // compare tags
-    if (tag == tag2cmp){ int result = 1; if(DEBUG) {print_hit_or_miss(result, index, tag, tag2cmp );} return 1; } // hit
-    else if (tag != tag2cmp){ int result = 0; if(DEBUG) {print_hit_or_miss(result, index, tag, tag2cmp );} return 0; } // miss
-    else { printf("Something went wrong. Returning -1"); return -1;}
-  
+      // compare tags
+      if (tag == tag2cmp){ 
+          result = 1; 
+      
+          if(DEBUG) {print_hit_or_miss(result, index, way, tag, tag2cmp ); } 
+      
+          return 1; // hit
+      
+      }else if (tag != tag2cmp){ int result = 0; 
+      
+          // go to next way
+          
+      }else { printf("Something went wrong. Returning -1\n"); return -1;}
+    }
+    
+    result = 0; 
+    if(DEBUG) {print_hit_or_miss(result, index, tag, way, tag2cmp ); }
+    return result; // we searched each way and didn't find anything...miss.
   }
     
 }
