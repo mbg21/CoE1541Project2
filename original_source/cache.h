@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define DEBUG 1
+
 struct cache_blk_t {
   unsigned long tag;
   char valid;
@@ -51,11 +53,18 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
   return C;
 }
 
+void print_hit_or_miss(int hit_or_miss_i, int index, unsigned long cache_tag, unsigned long tag2cmp){
+  
+  if (hit_or_miss_i == 1){printf("Hit---Index:%i---Tag in Cache:%lu---Tag to Compare:%lu", index, cache_tag, tag2cmp); }
+  else if (hit_or_miss_i == 0){ printf("Miss---Index:%i---Tag in Cache:%lu---Tag to Compare:%lu", index, cache_tag, tag2cmp); }
+  else { printf("Neither hit or miss. This shouldn't happen."); }
+}
+
 
 
 // Checks if a cache hits or misses at a given index for a given tag. 
 // This function returns 1 if its a hit, 0 if its a miss, or -1 is an error has occured. 
-int hit_or_miss(struct cache_t *cp, int index, unsigned long tag_2_cmp){
+int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
   
    // unsigned long cant be zero..
    // so just check for max size error
@@ -70,20 +79,12 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag_2_cmp){
     unsigned long tag = block->tag; // get tag from cache
     
     // compare tags
-    if (tag == tag_2_cmp){ return 1; } // hit
-    else if (tag != tag_2_cmp){ return 0; } // miss
+    if (tag == tag2cmp){ int result = 1; if(DEBUG) {print_hit_or_miss(result, index, tag, tag2cmp );} return 1; } // hit
+    else if (tag != tag2cmp){ int result = 0; if(DEBUG) {print_hit_or_miss(result, index, tag, tag2cmp );} return 0; } // miss
     else { printf("Something went wrong. Returning -1"); return -1;}
   
-    //printf("Tag at index %d: %lu\n", index, block->tag); 
   }
     
-}
-
-
-int has_L2_cache(struct cache_t){
-  
-  
-  
 }
 
 int cache_access(struct cache_t *cp, unsigned long address, 

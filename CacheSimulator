@@ -1,0 +1,6 @@
+
+#ifndef CACHESIMULATOR
+#define CACHESIMULATOR
+
+
+#include "CacheConfigurator/CacheConfigurator.h"
