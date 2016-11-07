@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "../CacheConfigurator/CacheConfigurator.h"
 
-#define DEBUG 1
+#define HM_DEBUG 1
 
 struct cache_blk_t {
   unsigned long tag;
@@ -33,7 +33,7 @@ int should_create_L2_cache(struct cache_config_t* cache_config){
   
   if (cache_config->size_L2 == 0){ return 0; } // there is no L2 cache
   else if (cache_config->size_L2 > 0 ){ return 1; } // we should create an L2 cache
-  else { if (DEBUG){ printf("Something weird happened\n"); } return -1; }
+  else { if (HM_DEBUG){ printf("Something weird happened\n"); } return -1; }
 }
 
 // function that returns a pointer to a cache with the given parameters
@@ -101,7 +101,7 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
         
           result = 1; 
       
-          if(DEBUG) {print_hit_or_miss(result, index, way, tag, tag2cmp ); } 
+          if(HM_DEBUG) {print_hit_or_miss(result, index, way, tag, tag2cmp ); } 
       
           return 1; // hit
       }else if (tag != tag2cmp){ 
@@ -110,10 +110,76 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
     }
     
     result = 0; 
-    if(DEBUG) {print_hit_or_miss(result, index, tag, way, tag2cmp ); }
+    if(HM_DEBUG) {print_hit_or_miss(result, index, tag, way, tag2cmp ); }
     return result; // we searched each way and didn't find anything...miss.
   }
     
+}
+
+
+// Check if a given cache slot at specified index with specifiec tag is dirty or not.
+// Returns 0 if not dirty, and 1 if it is dirty, -1 if tag was not found in cache
+int is_dirty(struct cache_t* cp, int index, unsigned long tag2find){
+  
+  // get the block from the specific set
+  struct cache_blk_t* blocks = cp->blocks[index]; 
+  
+  // search those blocks for the given tag
+  
+  for (int i = 0; i < cp->assoc; i++){
+    
+    struct cache_blk_t block_in_way = blocks[i]; 
+    unsigned long tag = block_in_way.tag; 
+ 
+    // if tag is found: 
+    // check that block and see if bit is dirty
+    if (tag == tag2find){
+      char dirty_bit = block_in_way.dirty; 
+     
+      if (dirty_bit == '0'){ return 0; } // not dirty
+      else { return 1; } // dirty
+      
+    }else {
+      
+      // check next way..
+    }
+  }
+  
+  // we went through the whole set and couldn't find the tag
+  // thus, we cant say if dirty or not
+  return -1; 
+}
+
+
+int is_valid(struct cache_t* cp, int index, unsigned long tag2find){
+  
+  // get the block from the specific set
+    struct cache_blk_t* blocks = cp->blocks[index]; 
+    
+    // search those blocks for the given tag
+    
+    for (int i = 0; i < cp->assoc; i++){
+      
+      struct cache_blk_t block_in_way = blocks[i]; 
+      unsigned long tag = block_in_way.tag; 
+   
+      // if tag is found: 
+      // check that block and see if bit is valid
+      if (tag == tag2find){
+        char valid_bit = block_in_way.valid; 
+       
+        if (valid_bit == '0'){ return 0; } // not valid
+        else { return 1; } // valid
+        
+      }else {
+        
+        // check next way..
+      }
+    }
+    
+    // we went through the whole set and couldn't find the tag
+    // thus, we cant say if valid or not
+    return -1; 
 }
 
 int cache_access(struct cache_t *cp, unsigned long address, 

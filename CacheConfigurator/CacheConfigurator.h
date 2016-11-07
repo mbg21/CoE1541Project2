@@ -18,7 +18,7 @@
 #define CC_DEBUG 0
 #define CC_LINESIZE 128
 
-const char* filepath = "CacheConfigurator/cache_config.txt";
+//const char* filepath = "CacheConfigurator/cache_config.txt";
 const char mode = 'r';
 
 typedef struct cache_config_t {
@@ -31,7 +31,7 @@ typedef struct cache_config_t {
 	int access_time_mem;
 } cache_config_t;
 
-cache_config_t* read_config_file () {
+cache_config_t* read_config_file (char* filepath) {
 	FILE* file_ptr = fopen(filepath, &mode);
 	void* line_buf = malloc(CC_LINESIZE);
 	cache_config_t* configuration = malloc(sizeof(cache_config_t));
