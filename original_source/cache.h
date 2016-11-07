@@ -136,7 +136,7 @@ int is_dirty(struct cache_t* cp, int index, unsigned long tag2find){
     if (tag == tag2find){
       char dirty_bit = block_from_way.dirty; 
      
-      if (dirty_bit == '0'){ return 0; } // not dirty
+      if (dirty_bit == 0){ return 0; } // not dirty
       else { return 1; } // dirty
       
     }else {
@@ -194,7 +194,7 @@ int set_valid_bit(struct cache_t* cp, int index, unsigned long tag2find, char va
     
     // if tag is found: 
     // check that block and see if bit is valid
-    if (tag == tag2find){ block_from_way.valid = valid_bit; printf("Bit Changed to %d\n", block_from_way.valid); return 0; } // set the valid bit to the specified bit
+    if (tag == tag2find){ cp->blocks[index][i].valid = valid_bit; return 0; } // set the valid bit to the specified bit
     else {  } // check next way..
   }
   
@@ -218,7 +218,7 @@ int set_dirty_bit(struct cache_t* cp, int index, unsigned long tag2find, char di
     
     // if tag is found: 
     // check that block and see if bit is valid
-    if (tag == tag2find){ block_from_way.valid = dirty_bit; return 0; } // set the valid bit to the specified bit
+    if (tag == tag2find){ cp->blocks[index][i].dirty = dirty_bit; return 0; } // set the valid bit to the specified bit
     else {  } // check next way..
   }
   
