@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <arpa/inet.h>
 #include "CPU.h" 
+#include <stdlib.h>
 
 // to keep cache statistics
 unsigned int accesses = 0;
