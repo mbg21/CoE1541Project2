@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 	write_tag(cache, 0, 1, 3);  // put 3 in a cache slot: index-0, way-1
 	hit_or_miss(cache, 0, 3); // hit --> 3 found in cache
 	
+	hit_or_miss(cache, 0, 100); // miss--> not in cache
 	write_tag(cache, 0, 0, 100); // put 100 in cache slot: index-0, way-0
 	hit_or_miss(cache, 0, 3); // hit --> 3 is found in index-0, way-1
 	hit_or_miss(cache, 0, 100); // hit --> 100 found in index-0, way-0

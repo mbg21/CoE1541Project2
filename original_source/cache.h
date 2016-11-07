@@ -67,7 +67,7 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
 void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cache_tag, unsigned long tag2cmp){
   
   if (hit_or_miss_i == 1){printf("Hit!\tIndex:%d\t\tWay:%d\t\t\tTag in Cache:%lu\t\tTag to Find:%lu\t\tNumerical Value:%d\n", index, way, cache_tag, tag2cmp, hit_or_miss_i); }
-  else if (hit_or_miss_i == 0){ printf("Miss!\t-------\t\t-----\t\t\t--------------\t\tTag to Find:%lu\t\tNumerical Value:%d\n", tag2cmp, hit_or_miss_i); }
+  else if (hit_or_miss_i == 0){ printf("Miss!\tIndex:%d\t\t-----\t\t\t--------------\t\tTag to Find:%lu\t\tNumerical Value:%d\n", index, tag2cmp, hit_or_miss_i); }
   else { printf("Neither hit or miss. This shouldn't happen."); }
 }
 
