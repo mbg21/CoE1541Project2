@@ -39,8 +39,12 @@ int main(int argc, char *argv[]) {
 		
 		
 		
-	printf("%d\n",cache->blocks[0][0].valid );
-	printf("%d", is_valid(cache, 0, 100)); 
+	//printf("%d\n",cache->blocks[0][0].valid );
+	//printf("%d\n", is_valid(cache, 0, 3)); 
+	
+	printf("%d\n", set_valid_bit(cache, 0, 3, 1));
+	printf("%d\n", is_valid(cache, 0, 3));
+	printf("%d\n", cache->blocks[0][1].valid); 
 		
 //	write_tag(cache, 0, 0, 200); 
 //	write_tag(cache, 0, 2, 3);

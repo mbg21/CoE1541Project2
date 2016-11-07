@@ -46,8 +46,8 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
 
   // YOUR JOB: calculate the number of sets and blocks in the cache
   
-//  nblocks = X;
-//  nsets = Y;
+  //  nblocks = X;
+  //  nsets = Y;
 
   struct cache_t *C = (struct cache_t *)calloc(1, sizeof(struct cache_t));
 		
@@ -128,13 +128,13 @@ int is_dirty(struct cache_t* cp, int index, unsigned long tag2find){
   
   for (int i = 0; i < cp->assoc; i++){
     
-    struct cache_blk_t block_in_way = blocks[i]; 
-    unsigned long tag = block_in_way.tag; 
+    struct cache_blk_t block_from_way = blocks[i]; 
+    unsigned long tag = block_from_way.tag; 
  
     // if tag is found: 
     // check that block and see if bit is dirty
     if (tag == tag2find){
-      char dirty_bit = block_in_way.dirty; 
+      char dirty_bit = block_from_way.dirty; 
      
       if (dirty_bit == '0'){ return 0; } // not dirty
       else { return 1; } // dirty
@@ -157,20 +157,17 @@ int is_valid(struct cache_t* cp, int index, unsigned long tag2find){
     struct cache_blk_t* blocks = cp->blocks[index]; 
     
     // search those blocks for the given tag
-    
     for (int i = 0; i < cp->assoc; i++){
       
-      struct cache_blk_t block_in_way = blocks[i]; 
-      unsigned long tag = block_in_way.tag; 
-   
+      struct cache_blk_t block_from_way = blocks[i]; 
+      unsigned long tag = block_from_way.tag; 
+      
       // if tag is found: 
       // check that block and see if bit is valid
       if (tag == tag2find){
-        char valid_bit = block_in_way.valid; 
-       
-        if (valid_bit == '0'){ return 0; } // not valid
+        char valid_bit = block_from_way.valid; 
+        if (valid_bit == 0){ return 0; } // not valid
         else { return 1; } // valid
-        
       }else {
         
         // check next way..
@@ -180,6 +177,54 @@ int is_valid(struct cache_t* cp, int index, unsigned long tag2find){
     // we went through the whole set and couldn't find the tag
     // thus, we cant say if valid or not
     return -1; 
+}
+
+// Sets the valid bit of some block at a given index for a given tag to the specified valid_bit input. 
+// Returns 0 if the bit was successfully changed, and -1 if bit was not found in the cache set.
+int set_valid_bit(struct cache_t* cp, int index, unsigned long tag2find, char valid_bit){
+  
+  // get the block from the specific set
+  struct cache_blk_t* blocks = cp->blocks[index]; 
+  
+  // search those blocks for the given tag
+  for (int i = 0; i < cp->assoc; i++){
+    
+    struct cache_blk_t block_from_way = blocks[i]; 
+    unsigned long tag = block_from_way.tag; 
+    
+    // if tag is found: 
+    // check that block and see if bit is valid
+    if (tag == tag2find){ block_from_way.valid = valid_bit; printf("Bit Changed to %d\n", block_from_way.valid); return 0; } // set the valid bit to the specified bit
+    else {  } // check next way..
+  }
+  
+  // we went through the whole set and couldn't find the tag
+  // thus, we can't change the bit
+  return -1;
+}
+
+// Sets the valid bit of some block at a given index for a given tag to the specified dirty input. 
+// Returns 0 if the bit was successfully changed, and -1 if bit was not found in the cache set.
+int set_dirty_bit(struct cache_t* cp, int index, unsigned long tag2find, char dirty_bit){
+  
+  // get the block from the specific set
+  struct cache_blk_t* blocks = cp->blocks[index]; 
+  
+  // search those blocks for the given tag
+  for (int i = 0; i < cp->assoc; i++){
+    
+    struct cache_blk_t block_from_way = blocks[i]; 
+    unsigned long tag = block_from_way.tag; 
+    
+    // if tag is found: 
+    // check that block and see if bit is valid
+    if (tag == tag2find){ block_from_way.valid = dirty_bit; return 0; } // set the valid bit to the specified bit
+    else {  } // check next way..
+  }
+  
+  // we went through the whole set and couldn't find the tag
+  // thus, we can't change the bit 
+  return -1;
 }
 
 int cache_access(struct cache_t *cp, unsigned long address, 
