@@ -64,7 +64,7 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency)
   return C;
 }
 
-void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cache_tag, unsigned long tag2cmp){
+void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cache_tag, uint32_t tag2cmp){
   
   if (hit_or_miss_i == 1){printf("Hit!\tIndex:%d\t\tWay:%d\t\t\tTag in Cache:%lu\t\tTag to Find:%lu\t\tNumerical Value:%d\n", index, way, cache_tag, tag2cmp, hit_or_miss_i); }
   else if (hit_or_miss_i == 0){ printf("Miss!\tIndex:%d\t\t-----\t\t\t--------------\t\tTag to Find:%lu\t\tNumerical Value:%d\n", index, tag2cmp, hit_or_miss_i); }
@@ -73,7 +73,7 @@ void print_hit_or_miss(int hit_or_miss_i, int index, int way, unsigned long cach
 
 // Checks if a cache hits or misses at a given index for a given tag. 
 // This function returns 1 if its a hit, 0 if its a miss, or -1 is an error has occured. 
-int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
+int hit_or_miss(struct cache_t *cp, int index, uint32_t tag2cmp){
     
   struct cache_blk_t* blocks = cp->blocks[index]; // get blocks from cache
   struct cache_blk_t block_from_way;
@@ -119,7 +119,7 @@ int hit_or_miss(struct cache_t *cp, int index, unsigned long tag2cmp){
 
 // Check if a given cache slot at specified index with specifiec tag is dirty or not.
 // Returns 0 if not dirty, and 1 if it is dirty, -1 if tag was not found in cache
-int is_dirty(struct cache_t* cp, int index, unsigned long tag2find){
+int is_dirty(struct cache_t* cp, int index, uint32_t tag2find){
   
   // get the block from the specific set
   struct cache_blk_t* blocks = cp->blocks[index]; 
@@ -151,7 +151,7 @@ int is_dirty(struct cache_t* cp, int index, unsigned long tag2find){
 }
 
 
-int is_valid(struct cache_t* cp, int index, unsigned long tag2find){
+int is_valid(struct cache_t* cp, int index, uint32_t tag2find){
   
   // get the block from the specific set
     struct cache_blk_t* blocks = cp->blocks[index]; 
@@ -181,7 +181,7 @@ int is_valid(struct cache_t* cp, int index, unsigned long tag2find){
 
 // Sets the valid bit of some block at a given index for a given tag to the specified valid_bit input. 
 // Returns 0 if the bit was successfully changed, and -1 if bit was not found in the cache set.
-int set_valid_bit(struct cache_t* cp, int index, unsigned long tag2find, char valid_bit){
+int set_valid_bit(struct cache_t* cp, int index, uint32_t tag2find, char valid_bit){
   
   // get the block from the specific set
   struct cache_blk_t* blocks = cp->blocks[index]; 
@@ -205,7 +205,7 @@ int set_valid_bit(struct cache_t* cp, int index, unsigned long tag2find, char va
 
 // Sets the valid bit of some block at a given index for a given tag to the specified dirty input. 
 // Returns 0 if the bit was successfully changed, and -1 if bit was not found in the cache set.
-int set_dirty_bit(struct cache_t* cp, int index, unsigned long tag2find, char dirty_bit){
+int set_dirty_bit(struct cache_t* cp, int index, uint32_t tag2find, char dirty_bit){
   
   // get the block from the specific set
   struct cache_blk_t* blocks = cp->blocks[index]; 

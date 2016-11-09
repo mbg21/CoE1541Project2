@@ -21,7 +21,7 @@ void run_accesses1(int access_sequence[], int access_count, cache_config_t* cach
 	for(int i=0; i<access_count; i++) {
 		uint32_t address = (uint32_t) access_sequence[i];
 		uint32_t index = getCacheIndex(address, cache, 1);
-		int32_t tag = getCacheTag(address, cache, 1);
+		uint32_t tag = getCacheTag(address, cache, 1);
 		printf("byte_address: 0x%08X (%u) -> (index: %u, tag: %u)\n\n", address, address, index, tag);
 	}
 }

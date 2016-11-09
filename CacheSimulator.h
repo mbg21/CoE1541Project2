@@ -16,7 +16,7 @@ void read_tag(struct cache_t* cp, int index, int assoc){
 	printf("Tag at (Index:%d, Way:%i)-->%lu\n", index, assoc, cp->blocks[index][assoc].tag); 
 }
 
-void write_tag(struct cache_t* cp, int index, int assoc, unsigned long tag2write){	
+void write_tag(struct cache_t* cp, int index, int assoc, uint32_t tag2write){	
 	int i; 
 	
 	if (assoc > cp->assoc - 1|| assoc < 0){
@@ -48,7 +48,7 @@ struct cache_t* file2Cache(char* filepath){
 }
 
 
-void detect_hit_or_miss(struct cache_t* cp, int index, unsigned long tag){
+void detect_hit_or_miss(struct cache_t* cp, int index, uint32_t tag){
 	
 	int result = hit_or_miss(cp, index, tag);
 
