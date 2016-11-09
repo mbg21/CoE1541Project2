@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CC_DEBUG 1
+#define CC_DEBUG 0
 #define CC_LINESIZE 128
 
 const char mode = 'r';

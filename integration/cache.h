@@ -6,6 +6,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "CacheConfigurator.h"
+#include "AddressParser.h"
+
+#define CACHEDEBUG 1
+
+extern cache_config_t* cache_config;
+
 struct cache_blk_t {
 	unsigned long tag;
 	char valid;
@@ -26,6 +33,8 @@ struct cache_t {
 	struct cache_blk_t **blocks;	// the array of cache blocks
 };
 
+
+//	size is provided in KiB - this is passed the cache_config_t parameters, it should not read the external global
 struct cache_t * cache_create(int size, int blocksize, int assoc, int latency) {
 	int i;
 	int nblocks = 1;		// number of blocks in the cache
@@ -35,6 +44,11 @@ struct cache_t * cache_create(int size, int blocksize, int assoc, int latency) {
 	//
 	// nblocks = X;
 	// nsets = Y;
+	
+	//	nblocks = cachesize(KiB)*1024 / blocksize(B)
+	//	nsets = nblocks / associativity
+	nblocks = size*1024 / blocksize;
+	nsets = nblocks / assoc;
 
 	struct cache_t *C = (struct cache_t *)calloc(1, sizeof(struct cache_t));
 		
@@ -51,9 +65,94 @@ struct cache_t * cache_create(int size, int blocksize, int assoc, int latency) {
 	return C;
 }
 
-int cache_access(struct cache_t *cp, unsigned long address, 
-			 char access_type, unsigned long long now, struct cache_t *next_cp)
+//	this will need to read the external global
+int cache_access(struct cache_t *cp, unsigned long address, char access_type, unsigned long long now, struct cache_t *next_cp)
 {
+	// Check the associtivity of the configuration based on text configuration
+	
+	
+// case 1: 1 way associtivity
+	
+	// Get the size of the cache (from config file)
+	// Turn block size into bytes (2^X) (from config file)
+	// Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+	
+	// index = address mod block size
+	// tag = 32 - Z - X
+ 
+	// Go to index in cache AND check for tag
+		
+	// if tag found: 
+		 // hit --> L1 hit_counter++
+		
+	// if tag is NOT present:
+		// miss in L1 --> L1 miss_counter++
+	
+		// check for presence of L2 cache: 
+		// if there is L2 cache, go to it --> CPI + L2 access time
+			// check the index in the L2 and see if tag is found
+			// if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+			// if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++	 
+			
+		// if there is NO L2 cache: 
+			// determine LRU to replace and replace
+		
+		
+		
+	// case 2: 4 way associtivity
+	
+		// Get the size of the cache (from config file)
+		// Turn block size into bytes (2^X) (from config file)
+		// Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+		
+		// index = address mod block size
+		// tag = 32 - Z - X
+	 
+		// go to index in cache AND search each 'way' for the tag (4 ways)
+		
+		// if tag is present:	
+		 // hit --> L1 hit_counter++
+		
+		// if tag is NOT present:
+		// miss --> L1 miss_counter++; 
+		
+		// check for presence of L2 cache: 
+			// if there is L2 cache, go to it --> CPI + L2 access time
+			// check the index in the L2 and see if tag is found in a 'way'
+			// if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+			// if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++ 
+			 
+			// if there is NO L2 cache: 
+			 // determine LRU to replace and replace
+
+	
+	// case 3: 8 way associtivity
+	
+		// Get the size of the cache (from config file)
+		// Turn block size into bytes (2^X) (from config file)
+		// Get number of block (cache size/block size) --> 2^Y/2^X = 2^Z
+		
+		// index = address mod block size
+		// tag = 32 - Z - X
+	 
+		// go to index in cache AND search each 'way' for the tag (8 ways)
+		
+		// if tag is present:	
+		 // hit --> L1 hit_counter++
+		
+		// if tag is NOT present: 
+		// miss --> L1 miss_counter++; 
+		 
+		// check for presence of L2 cache: 
+			// if there is L2 cache, go to it --> CPI + L2 access time
+			// check the index in the L2 and see if tag is found in a 'way'
+			// if IN L2 --> grab from L2 and evict LRU entry in L1 & store --> L2 hit_counter++
+			// if NOT in L2 --> go to MAIN MEMORY --> CPI + memory access_time --> L2 miss_counter++
+			
+			// if there is NO L2 cache: 
+			// determine LRU to replace and replace
+ 
+
 	//
 	// Based on address, determine the set to access in cp and examine the blocks
 	// in the set to check hit/miss and update the golbal hit/miss statistics
@@ -71,3 +170,4 @@ int cache_access(struct cache_t *cp, unsigned long address,
 	return(cp->hit_latency);
 }
 
+//EOF

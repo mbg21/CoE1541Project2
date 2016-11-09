@@ -9,6 +9,7 @@
 #include "CPU.h"
 #include "cache.h"
 #include "CacheConfigurator.h"
+#include "AddressParser.h"
 
 #define CC_USEFILE 1
 
@@ -20,6 +21,9 @@ unsigned int L1hits = 0;
 unsigned int L1misses = 0;
 unsigned int L2hits = 0;
 unsigned int L2misses = 0;
+
+// globally-accessible cache configuration pointer
+cache_config_t* cache_config;
 
 
 int main(int argc, char **argv)
@@ -57,8 +61,9 @@ int main(int argc, char **argv)
 	unsigned int mem_latency;
 	
 	char* filepath = "./cache_config.txt";
-	cache_config_t* cache_config;
+	
 	if (CC_USEFILE == 1) cache_config = read_config_file(filepath);
+	
 	if (CC_USEFILE && cache_config!=NULL) {
 		L1size = cache_config->size_L1;
 		bsize = cache_config->blocksize;
