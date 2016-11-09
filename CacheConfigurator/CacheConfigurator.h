@@ -18,17 +18,16 @@
 #define CC_DEBUG 0
 #define CC_LINESIZE 128
 
-//const char* filepath = "CacheConfigurator/cache_config.txt";
 const char mode = 'r';
 
 typedef struct cache_config_t {
-	int size_L1;
-	int blocksize;
+	int size_L1;						//	size in KiB
+	int blocksize;					//	size in Bytes
 	int associativity_L1;
-	int size_L2;
-	int associativity_L2;
-	int access_time_L2;
-	int access_time_mem;
+	int size_L2;						//	size in KiB
+	int associativity_L2;				
+	int access_time_L2;				//	time in cycles
+	int access_time_mem;				//	time in cycles
 } cache_config_t;
 
 cache_config_t* read_config_file (char* filepath) {
