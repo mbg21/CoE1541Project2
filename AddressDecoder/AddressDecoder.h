@@ -50,10 +50,10 @@ uint32_t getCacheIndex(uint32_t address, cache_config_t* cache_config, int tier)
 		uint32_t offset = address << (index_w + tag_w);
 		offset = offset >> (index_w + tag_w);
 		
-		//if (AD_DEBUG) printf("Cachesize: %u, Blocksize: %u, Number Blocks:%u, Number of Sets:%u\n", cachesize*1024, blocksize, nblocks, nsets);
-		//if (AD_DEBUG) printf("Cachesize Log: %u, Blocksize Log: %u, Number Blocks Log:%u, Number of Sets Log:%u\n", cachesize_log, blocksize_log, nblocks_log, nsets_log);
-		//if (AD_DEBUG) printf("Tag Bits = %u bits\n", tag_w);
-		//if (AD_DEBUG) printf("    index = %u, offset = %u, tag = %u\n", index, offset, tag);
+		if (AD_DEBUG) printf("Cachesize: %u, Blocksize: %u, Number Blocks:%u, Number of Sets:%u\n", cachesize*1024, blocksize, nblocks, nsets);
+		if (AD_DEBUG) printf("Cachesize Log: %u, Blocksize Log: %u, Number Blocks Log:%u, Number of Sets Log:%u\n", cachesize_log, blocksize_log, nblocks_log, nsets_log);
+		if (AD_DEBUG) printf("Tag Bits = %u bits\n", tag_w);
+		if (AD_DEBUG) printf("    index = %u, offset = %u, tag = %u\n", index, offset, tag);
 	
 	} else if (tier == 2) {
 		//	consult the L2

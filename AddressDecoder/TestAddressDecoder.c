@@ -14,7 +14,7 @@
 #include "AddressDecoder.h"
 
 //	word-address access sequence from Homework 4
-int access_seq2[] = {0x00000004, 0x00001001, 0x10004884, 0x7FFF8000, 0xFFFFC000};
+int access_seq2[] = {0x00000007, 0x00001001, 0x10004884, 0x7FFF8000, 0xFFFFC000};
 int access_count2 = 5;
 
 void run_accesses1(int access_sequence[], int access_count, cache_config_t* cache) {
