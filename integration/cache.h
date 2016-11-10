@@ -272,19 +272,20 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 							}
 						}
 						//	if LRU is dirty, write back (to L2)
-						//	write policy?
+						if (cp->blocks[(int) cache_index][lruindex].dirty == 1){
 						
+							//update access time and dirty bit to L1 dirty
+							next_cp->blocks[(int) cache_index][lruindex].ts = cp->blocks[(int) cache_index][lruindex].ts;
+							next_cp->blocks[(int) cache_index][lruindex].dirty = 1; 	
+						}
+								
+						//	place in L1
+						cp->blocks[(int) cache_index][lruindex].tag = address_tag; 	
 					}
 					
-				
-				
-					//	place in L1
 				} else {
 					// big problem
 				}
-				
-				
-				
 				
 				
 				total_latency += next_cp->hit_latency;
@@ -292,13 +293,50 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				// can the memory consultation be extracted to a helper function?
 				if (CACHEDEBUG) { printf(" -- L2 miss\n"); }
 				L2misses++;
+				
+				int l2aindex = -1; 
+				for (int i = 0; i < (next_cp->assoc); i++){
+					
+					if (next_cp->blocks[(int) cache_index][i].valid == 0){
+						l2aindex = i; 
+						break; 
+					}
+				}
+					
+				if (l2aindex ==  -1){
+					// if no free space, find and evict LRU
+					int lruindex = -1; 
+					int lrucycle = INT_MAX; 
+						
+					for (int i = 0; i < next_cp->assoc; i++){
+						if (next_cp->blocks[(int) cache_index][i].ts < lrucycle){
+							lrucycle = next_cp->blocks[(int) cache_index][i].ts; 
+							lruindex = i; 
+						}	
+					}
+					
+					if (next_cp->blocks[(int) cache_index][lruindex].dirty == 1){
+						// write back to memory, but nothing to do...
+						
+						
+					}
+					
+					//not dirty... overwrite
+					next_cp->blocks[(int) cache_index][lruindex].tag = address_tag; 
+					next_cp->blocks[(int) cache_index][lruindex].ts = now; 
+					next_cp->blocks[(int) cache_index][lruindex].dirty = ((access_type == 'w') ? 1 : 0);		
+				}else{
+					next_cp->blocks[(int) cache_index][l2aindex].tag = address_tag; 
+					next_cp->blocks[(int) cache_index][l2aindex].ts = now; 
+					next_cp->blocks[(int) cache_index][l2aindex].dirty = ((access_type == 'w') ? 1 : 0);
+				}
+				
 				total_latency += (cache_config->access_time_mem) + (next_cp->hit_latency);
 			}
 				
 				
 				
-		}
-		else /* No L2 - Go to Memory */
+		}else /* No L2 - Go to Memory */
 		{	
 			int wayindex = -1;
 			// see if there's an open spot in L1

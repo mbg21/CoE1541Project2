@@ -1,0 +1,442 @@
+
+ ** opening file sample.tr
+Miss!	Index:0000		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0132		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0992		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0968		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0972		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0007		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0940		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0944		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0936		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0212		-----			--------------		Tag to Find:01048560		Numerical Value:0
+Miss!	Index:0196		-----			--------------		Tag to Find:00524296		Numerical Value:0
+Miss!	Index:0242		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0196		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0198		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:1010		-----			--------------		Tag to Find:00939546		Numerical Value:0
+Miss!	Index:0054		-----			--------------		Tag to Find:00972414		Numerical Value:0
+Miss!	Index:0204		-----			--------------		Tag to Find:01048568		Numerical Value:0
+Miss!	Index:0301		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0318		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0311		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0813		-----			--------------		Tag to Find:00718511		Numerical Value:0
+Miss!	Index:0823		-----			--------------		Tag to Find:00984719		Numerical Value:0
+Miss!	Index:0468		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0792		-----			--------------		Tag to Find:00525325		Numerical Value:0
+Miss!	Index:0967		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0099		-----			--------------		Tag to Find:01048560		Numerical Value:0
+Miss!	Index:0804		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0736		-----			--------------		Tag to Find:00525329		Numerical Value:0
+Miss!	Index:0956		-----			--------------		Tag to Find:01048559		Numerical Value:0
+Miss!	Index:0008		-----			--------------		Tag to Find:00525324		Numerical Value:0
+Miss!	Index:0128		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0976		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0980		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0992		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 3514
+Miss!	Index:0988		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0984		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0204		-----			--------------		Tag to Find:00589828		Numerical Value:0
+Miss!	Index:0952		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0948		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0944		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 4022
+Miss!	Index:0064		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0000		-----			--------------		Tag to Find:00131072		Numerical Value:0
+Miss!	Index:0920		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0924		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0256		-----			--------------		Tag to Find:00593948		Numerical Value:0
+Miss!	Index:0896		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0207		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0208		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0212		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0096		-----			--------------		Tag to Find:00525329		Numerical Value:0
+Miss!	Index:0216		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0220		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0128		-----			--------------		Tag to Find:00525329		Numerical Value:0
+Miss!	Index:0184		-----			--------------		Tag to Find:00525323		Numerical Value:0
+Miss!	Index:0912		-----			--------------		Tag to Find:00525323		Numerical Value:0
+Miss!	Index:0928		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0931		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0272		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0544		-----			--------------		Tag to Find:00589816		Numerical Value:0
+Miss!	Index:0220		-----			--------------		Tag to Find:00589819		Numerical Value:0
+Miss!	Index:0235		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0002		-----			--------------		Tag to Find:00065548		Numerical Value:0
+Miss!	Index:0828		-----			--------------		Tag to Find:00131074		Numerical Value:0
+Miss!	Index:0028		-----			--------------		Tag to Find:00589817		Numerical Value:0
+Miss!	Index:0442		-----			--------------		Tag to Find:00589819		Numerical Value:0
+Miss!	Index:0000		-----			--------------		Tag to Find:00065548		Numerical Value:0
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 6725
+Miss!	Index:0980		-----			--------------		Tag to Find:00065537		Numerical Value:0
+Miss!	Index:0241		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0920		-----			--------------		Tag to Find:00065537		Numerical Value:0
+Miss!	Index:0236		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0656		-----			--------------		Tag to Find:00065621		Numerical Value:0
+Miss!	Index:0672		-----			--------------		Tag to Find:00065621		Numerical Value:0
+Miss!	Index:0688		-----			--------------		Tag to Find:00065621		Numerical Value:0
+Miss!	Index:0000		-----			--------------		Tag to Find:00080908		Numerical Value:0
+Miss!	Index:0956		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0952		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 7692
+Hit!	Index:0948		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 7693
+Hit!	Index:0944		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 7694
+Hit!	Index:0940		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 7695
+Hit!	Index:0936		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 7696
+Miss!	Index:0916		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0912		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0064		-----			--------------		Tag to Find:00131084		Numerical Value:0
+Hit!	Index:0920		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 8006
+Hit!	Index:0924		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 8007
+Miss!	Index:0904		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0864		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0848		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0868		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0884		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0880		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0876		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0872		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0860		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0856		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0852		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0896		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 9126
+Miss!	Index:0048		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0795		-----			--------------		Tag to Find:00060847		Numerical Value:0
+Hit!	Index:0795		Way:00			Tag in Cache:00060847		Tag to Find:00060847		Numerical Value:1
+ -- access time: 9336
+Miss!	Index:0050		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0424		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0432		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0436		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0440		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0428		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0795		Way:00			Tag in Cache:00060847		Tag to Find:00060847		Numerical Value:1
+ -- access time: 9957
+Hit!	Index:0795		Way:00			Tag in Cache:00060847		Tag to Find:00060847		Numerical Value:1
+ -- access time: 9961
+Hit!	Index:0795		Way:00			Tag in Cache:00060847		Tag to Find:00060847		Numerical Value:1
+ -- access time: 9965
+Hit!	Index:0795		Way:00			Tag in Cache:00060847		Tag to Find:00060847		Numerical Value:1
+ -- access time: 9968
+Hit!	Index:0048		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 9973
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 9976
+Hit!	Index:0000		Way:01			Tag in Cache:00131072		Tag to Find:00131072		Numerical Value:1
+ -- access time: 9978
+Miss!	Index:0100		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0104		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0016		-----			--------------		Tag to Find:00066585		Numerical Value:0
+Miss!	Index:0136		-----			--------------		Tag to Find:00066585		Numerical Value:0
+Miss!	Index:0832		-----			--------------		Tag to Find:00131076		Numerical Value:0
+Miss!	Index:0080		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0084		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0088		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0496		-----			--------------		Tag to Find:00066591		Numerical Value:0
+Miss!	Index:0544		-----			--------------		Tag to Find:00066591		Numerical Value:0
+Miss!	Index:0092		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0096		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0392		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0400		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0396		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0176		-----			--------------		Tag to Find:00066593		Numerical Value:0
+Miss!	Index:0052		-----			--------------		Tag to Find:00589819		Numerical Value:0
+Hit!	Index:0048		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 11703
+Miss!	Index:0312		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0304		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0048		-----			--------------		Tag to Find:00131087		Numerical Value:0
+Miss!	Index:0308		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0128		Way:00			Tag in Cache:00065540		Tag to Find:00065540		Numerical Value:1
+ -- access time: 12137
+Miss!	Index:0888		-----			--------------		Tag to Find:00525329		Numerical Value:0
+Miss!	Index:0280		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0049		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Hit!	Index:0088		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 12444
+Miss!	Index:0124		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0312		-----			--------------		Tag to Find:00524280		Numerical Value:0
+Miss!	Index:0068		-----			--------------		Tag to Find:00065539		Numerical Value:0
+Miss!	Index:0816		-----			--------------		Tag to Find:00525333		Numerical Value:0
+Miss!	Index:0313		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0360		-----			--------------		Tag to Find:00589818		Numerical Value:0
+Hit!	Index:0048		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 13054
+Hit!	Index:0124		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 13056
+Miss!	Index:0048		-----			--------------		Tag to Find:00065544		Numerical Value:0
+Hit!	Index:0048		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 13159
+Hit!	Index:0048		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 13162
+Hit!	Index:0049		Way:00			Tag in Cache:00065539		Tag to Find:00065539		Numerical Value:1
+ -- access time: 13164
+Miss!	Index:0004		-----			--------------		Tag to Find:00589828		Numerical Value:0
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 13269
+Miss!	Index:0384		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0404		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0400		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 13474
+Hit!	Index:0396		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 13475
+Hit!	Index:0392		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 13476
+Miss!	Index:0388		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 13579
+Miss!	Index:0000		-----			--------------		Tag to Find:00065550		Numerical Value:0
+Miss!	Index:0364		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0360		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0080		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0336		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Miss!	Index:0316		-----			--------------		Tag to Find:00524279		Numerical Value:0
+Hit!	Index:0312		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 14195
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 14197
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 14200
+Miss!	Index:0208		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Miss!	Index:0576		-----			--------------		Tag to Find:00525342		Numerical Value:0
+Miss!	Index:0072		-----			--------------		Tag to Find:00589901		Numerical Value:0
+Miss!	Index:0440		-----			--------------		Tag to Find:00525332		Numerical Value:0
+Miss!	Index:0800		-----			--------------		Tag to Find:00065548		Numerical Value:0
+Hit!	Index:0336		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 14733
+Hit!	Index:0316		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 14736
+Hit!	Index:0312		Way:00			Tag in Cache:00524279		Tag to Find:00524279		Numerical Value:1
+ -- access time: 14737
+Miss!	Index:0000		-----			--------------		Tag to Find:00131170		Numerical Value:0
+Miss!	Index:0096		-----			--------------		Tag to Find:00066601		Numerical Value:0
+Hit!	Index:0208		Way:01			Tag in Cache:00065540		Tag to Find:00065540		Numerical Value:1
+ -- access time: 14948
+Hit!	Index:0576		Way:00			Tag in Cache:00525342		Tag to Find:00525342		Numerical Value:1
+ -- access time: 14955
+Miss!	Index:0072		-----			--------------		Tag to Find:00589904		Numerical Value:0
+Hit!	Index:0440		Way:01			Tag in Cache:00525332		Tag to Find:00525332		Numerical Value:1
+ -- access time: 15063
+Miss!	Index:0800		-----			--------------		Tag to Find:00131172		Numerical Value:0
+Miss!	Index:0392		-----			--------------		Tag to Find:00065540		Numerical Value:0
+Hit!	Index:0000		Way:02			Tag in Cache:00065548		Tag to Find:00065548		Numerical Value:1
+ -- access time: 15270
+Miss!	Index:0000		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0004		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0008		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0012		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0016		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0020		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0024		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0028		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0032		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0036		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0040		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0044		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0048		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0052		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0056		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0060		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0064		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0068		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0072		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0076		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0080		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0084		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0088		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0092		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0096		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0100		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0104		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0108		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0112		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0116		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0120		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0124		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0128		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0132		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0136		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0140		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0144		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0148		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0152		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0156		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0160		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0164		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0168		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0172		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0176		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0180		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0184		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0188		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0192		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0196		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0200		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0204		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0208		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0212		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0216		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0220		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0224		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0228		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0232		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0236		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0240		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0244		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0248		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0252		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0256		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0260		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0264		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0268		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0272		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0276		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0280		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0284		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0288		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0292		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0296		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0300		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0304		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0308		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0312		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0316		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0320		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0324		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0328		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0332		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0336		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0340		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0344		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0348		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0352		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0356		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0360		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0364		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0368		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0372		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0376		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0380		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0384		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0388		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0392		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0396		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0400		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0404		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0408		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0412		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0416		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0420		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0424		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0428		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0432		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0436		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0440		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0444		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0448		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0452		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0456		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0460		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0464		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0468		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0472		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0476		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0480		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0484		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0488		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0492		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0496		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0500		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0504		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0508		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0512		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0516		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0520		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0524		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0528		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0532		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0536		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0540		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0544		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0548		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0552		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0556		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0560		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0564		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0568		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0572		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0576		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0580		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0584		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0588		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0592		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0596		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0600		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0604		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0608		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0612		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0616		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0620		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0624		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0628		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0632		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0636		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0640		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0644		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0648		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0652		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0656		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0660		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0664		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0668		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0672		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0676		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0680		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0684		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0688		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0692		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0696		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0700		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0704		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0708		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0712		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0716		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0720		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0724		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0728		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0732		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0736		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0740		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0744		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0748		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0752		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0756		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0760		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0764		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0768		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0772		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0776		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0780		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0784		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0788		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0792		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0796		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0800		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0804		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0808		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0812		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0816		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0820		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0824		-----			--------------		Tag to Find:00065622		Numerical Value:0
+Miss!	Index:0828		-----			--------------		Tag to Find:00065622		Numerical Value:0
++ Simulation terminates at cycle : 36400
++ Cache statistics 
