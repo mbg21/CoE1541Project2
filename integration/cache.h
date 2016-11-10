@@ -200,23 +200,25 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 	
 	//	Try to get from the L1
 	uint32_t ui32_address = (uint32_t) address;
-	uint32_t cache_index = getCacheIndex(ui32_address, cache_config, 1);
-	uint32_t address_tag = getCacheTag(ui32_address, cache_config, 1);
-	//printf("--CACHE REQUEST: address %u  ->  index: %u, tag: %u\n", ui32_address, cache_index, address_tag);
+	int l1cache_index = getCacheIndex(ui32_address, cache_config, 1);
+	uint32_t l1address_tag = getCacheTag(ui32_address, cache_config, 1);
+	//printf("--CACHE REQUEST: address %u  ->  index: %u, tag: %u\n", ui32_address, l1cache_index, l1address_tag);
+	int l2cache_index = (int) getCacheIndex(ui32_address, cache_config, 2);
+	uint32_t l2address_tag = (int) getCacheTag(ui32_address, cache_config, 2);
 	
 	//	Check hit/miss
-	int L1hit = hit_or_miss(cp, cache_index, address_tag, access_type);
+	int L1hit = hit_or_miss(cp, l1cache_index, l1address_tag, access_type);
 	
 	if (L1hit == 1) /* L1 HIT */
 	{	
 		//	update access time
 		//	1. find where in the set the block resides
 		for(int i=0; i<cp->assoc; i++) {
-			if( cp->blocks[(int) cache_index][i].tag == address_tag ) {
+			if( cp->blocks[l1cache_index][i].tag == l1address_tag ) {
 				//	2. update its ts with now
-				cp->blocks[(int) cache_index][i].ts = now;
-				cp->blocks[(int) cache_index][i].dirty = ((access_type == 'w') ? 1:0);
-				if (CACHEDEBUG) printf(" -- L1 Hit (%c) @ cyle %llu for index %u, tag %u\n", access_type, now, cache_index, address_tag);
+				cp->blocks[l1cache_index][i].ts = now;
+				cp->blocks[l1cache_index][i].dirty = ((access_type == 'w') ? 1:0);
+				if (CACHEDEBUG) printf(" -- L1 Hit (%c) @ cyle %llu for index %u, tag %u\n", access_type, now, l1cache_index, l1address_tag);
 			}
 		}
 		L1hits++;
@@ -224,10 +226,14 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 	}
 	else if (L1hit == 0) /* L1 MISS */
 	{	
+		printf(" -- L1 miss\n");
 		L1misses++;
 		if (cache_config->size_L2 != 0) /* L2 exists -- do lookup */
 		{
-			int L2hit = hit_or_miss(next_cp, cache_index, address_tag, access_type);
+			int L2hit = hit_or_miss(next_cp, l2cache_index, l2address_tag, access_type);
+			
+			printf(" -- L2 hit = %i\n", L2hit);
+			
 			if(L2hit == 1) {
 				if (CACHEDEBUG) { printf(" -- L2 hit\n"); }
 				L2hits++;
@@ -236,7 +242,7 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				int a_index = -1;
 				for(int i=0; i<next_cp->assoc; i++)
 				{
-					if (next_cp->blocks[(int) cache_index][i].tag == address_tag)
+					if (next_cp->blocks[l2cache_index][i].tag == l1address_tag)
 					{
 						a_index = i;
 						break;
@@ -245,15 +251,15 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				if (a_index != -1)
 				{
 					// 	update it
-					next_cp->blocks[(int) cache_index][a_index].ts = now;
-					next_cp->blocks[(int) cache_index][a_index].dirty = (access_type == 'w' ? 1:0);
-					next_cp->blocks[(int) cache_index][a_index].tag = address_tag;
+					next_cp->blocks[l2cache_index][a_index].ts = now;
+					next_cp->blocks[l2cache_index][a_index].dirty = (access_type == 'w' ? 1:0);
+					next_cp->blocks[l2cache_index][a_index].tag = l1address_tag;
 			
 					//	find space for it in L1
 					int l1aindex = -1;
 					for(int i=0; i<cp->assoc; i++)
 					{
-						if (cp->blocks[(int) cache_index][i].valid == 0) 
+						if (cp->blocks[l1cache_index][i].valid == 0) 
 						{
 							l1aindex = i;
 							break;
@@ -265,22 +271,22 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 						int lrucycle = INT_MAX;
 						for(int i=0; i<cp->assoc; i++)
 						{
-							if (cp->blocks[(int) cache_index][i].ts < lrucycle)
+							if (cp->blocks[l1cache_index][i].ts < lrucycle)
 							{
-								lrucycle = cp->blocks[(int) cache_index][i].ts;
+								lrucycle = cp->blocks[l1cache_index][i].ts;
 								lruindex = i;
 							}
 						}
 						//	if LRU is dirty, write back (to L2)
-						if (cp->blocks[(int) cache_index][lruindex].dirty == 1){
+						if (cp->blocks[l1cache_index][lruindex].dirty == 1){
 						
 							//update access time and dirty bit to L1 dirty
-							next_cp->blocks[(int) cache_index][lruindex].ts = cp->blocks[(int) cache_index][lruindex].ts;
-							next_cp->blocks[(int) cache_index][lruindex].dirty = 1; 	
+							next_cp->blocks[l2cache_index][lruindex].ts = cp->blocks[l1cache_index][lruindex].ts;
+							next_cp->blocks[l2cache_index][lruindex].dirty = 1; 	
 						}
 								
 						//	place in L1
-						cp->blocks[(int) cache_index][lruindex].tag = address_tag; 	
+						cp->blocks[l1cache_index][lruindex].tag = l1address_tag; 	
 					}
 					
 				} else {
@@ -297,7 +303,7 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				int l2aindex = -1; 
 				for (int i = 0; i < (next_cp->assoc); i++){
 					
-					if (next_cp->blocks[(int) cache_index][i].valid == 0){
+					if (next_cp->blocks[l2cache_index][i].valid == 0){
 						l2aindex = i; 
 						break; 
 					}
@@ -309,40 +315,40 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 					int lrucycle = INT_MAX; 
 						
 					for (int i = 0; i < next_cp->assoc; i++){
-						if (next_cp->blocks[(int) cache_index][i].ts < lrucycle){
-							lrucycle = next_cp->blocks[(int) cache_index][i].ts; 
+						if (next_cp->blocks[l2cache_index][i].ts < lrucycle){
+							lrucycle = next_cp->blocks[l2cache_index][i].ts; 
 							lruindex = i; 
 						}	
 					}
 					
-					if (next_cp->blocks[(int) cache_index][lruindex].dirty == 1){
+					if (next_cp->blocks[l2cache_index][lruindex].dirty == 1){
 						// write back to memory, but nothing to do...
 						
 						
 					}
 					
 					//not dirty... overwrite
-					next_cp->blocks[(int) cache_index][lruindex].tag = address_tag; 
-					next_cp->blocks[(int) cache_index][lruindex].ts = now; 
-					next_cp->blocks[(int) cache_index][lruindex].dirty = ((access_type == 'w') ? 1 : 0);		
+					next_cp->blocks[l2cache_index][lruindex].tag = l1address_tag; 
+					next_cp->blocks[l2cache_index][lruindex].ts = now; 
+					next_cp->blocks[l2cache_index][lruindex].dirty = ((access_type == 'w') ? 1 : 0);		
 				}else{
-					next_cp->blocks[(int) cache_index][l2aindex].tag = address_tag; 
-					next_cp->blocks[(int) cache_index][l2aindex].ts = now; 
-					next_cp->blocks[(int) cache_index][l2aindex].dirty = ((access_type == 'w') ? 1 : 0);
+					next_cp->blocks[l2cache_index][l2aindex].tag = l1address_tag; 
+					next_cp->blocks[l2cache_index][l2aindex].ts = now; 
+					next_cp->blocks[l2cache_index][l2aindex].dirty = ((access_type == 'w') ? 1 : 0);
 				}
 				
 				total_latency += (cache_config->access_time_mem) + (next_cp->hit_latency);
 			}
-				
-				
-				
+					
 		}else /* No L2 - Go to Memory */
 		{	
+			if (CACHEDEBUG) printf(" -- no L2, go to memory\n");
+			
 			int wayindex = -1;
 			// see if there's an open spot in L1
 			for(int i = 0; i<cp->assoc; i++)
 			{
-				if (cp->blocks[(int) cache_index][i].valid == 0) {
+				if (cp->blocks[l1cache_index][i].valid == 0) {
 					wayindex = i;
 					break;
 				}
@@ -353,32 +359,32 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				int LRUcycle = INT_MAX;
 				for(int i=0; i<cp->assoc; i++)
 				{
-					if (cp->blocks[(int) cache_index][i].ts < LRUcycle)
+					if (cp->blocks[l1cache_index][i].ts < LRUcycle)
 					{
-						LRUcycle = cp->blocks[(int) cache_index][i].ts;
+						LRUcycle = cp->blocks[l1cache_index][i].ts;
 						LRUindex = i;
 					}
 				}
 				if (LRUindex == -1 || LRUcycle == INT_MAX) { printf("something has gone horribly wrong finding the LRU block\n"); return -1; }
-				if (CACHEDEBUG) { printf(" -- cyle %llu : @index %u evicted block with tag %lu\n", now, cache_index, cp->blocks[(int) cache_index][LRUindex].tag); }
+				if (CACHEDEBUG) { printf(" -- cyle %llu : @index %u evicted block with tag %lu\n", now, l1cache_index, cp->blocks[l1cache_index][LRUindex].tag); }
 				// check if LRU block is dirty
-				if (cp->blocks[(int) cache_index][LRUindex].dirty == 1)
+				if (cp->blocks[l1cache_index][LRUindex].dirty == 1)
 				{
 					// write back to L2 if available, memory otherwise
 					// are there time penalties for these scenarios?
 				}
-				cp->blocks[(int) cache_index][LRUindex].valid = 1;
-				cp->blocks[(int) cache_index][LRUindex].tag = address_tag;
-				cp->blocks[(int) cache_index][LRUindex].dirty = (access_type == 'w' ? 1:0);
-				cp->blocks[(int) cache_index][LRUindex].ts = now;
+				cp->blocks[l1cache_index][LRUindex].valid = 1;
+				cp->blocks[l1cache_index][LRUindex].tag = l1address_tag;
+				cp->blocks[l1cache_index][LRUindex].dirty = (access_type == 'w' ? 1:0);
+				cp->blocks[l1cache_index][LRUindex].ts = now;
 			}
 			else
 			{
 				// otherwise write to the open spot
-				cp->blocks[(int) cache_index][wayindex].valid = 1;
-				cp->blocks[(int) cache_index][wayindex].tag = address_tag;
-				cp->blocks[(int) cache_index][wayindex].dirty = (access_type == 'w' ? 1:0);
-				cp->blocks[(int) cache_index][wayindex].ts = now;
+				cp->blocks[l1cache_index][wayindex].valid = 1;
+				cp->blocks[l1cache_index][wayindex].tag = l1address_tag;
+				cp->blocks[l1cache_index][wayindex].dirty = (access_type == 'w' ? 1:0);
+				cp->blocks[l1cache_index][wayindex].ts = now;
 			}
 			total_latency += (cache_config->access_time_mem);	
 		}
