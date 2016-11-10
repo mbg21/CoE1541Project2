@@ -25,6 +25,8 @@ unsigned int L2misses = 0;
 // globally-accessible cache configuration pointer
 cache_config_t* cache_config;
 
+// making cycle_number globally accessible for non-colliding timestamps of memory accesses
+unsigned int cycle_number;
 
 int main(int argc, char **argv)
 {
@@ -40,7 +42,7 @@ int main(int argc, char **argv)
 	unsigned int t_PC = 0;
 	unsigned int t_Addr = 0;
 
-	unsigned int cycle_number = 0;
+	cycle_number = 0;
 
 	if (argc == 1) {
 		fprintf(stdout, "\nUSAGE: tv <trace_file> <switch - any character>\n");
@@ -79,7 +81,7 @@ int main(int argc, char **argv)
 		L2size = 0;
 		L2_hit_latency = 6;
 		mem_latency = 100;
-		printf("used default cache values\n");
+		//printf("used default cache values\n");
 	}
 	
 	fprintf(stdout, "\n ** opening file %s\n", trace_file_name);
@@ -188,6 +190,7 @@ int main(int argc, char **argv)
 	}//end-while
 
 	trace_uninit();
+	free(cache_config);
 	exit(0);
 }//end-main()
 
