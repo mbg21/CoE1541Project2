@@ -15,7 +15,6 @@
 #define CS_DEBUG 0
 
 extern cache_config_t* cache_config;
-extern unsigned int cycle_number;
 
 struct cache_blk_t {
 	unsigned long tag;
@@ -189,6 +188,8 @@ int set_dirty_bit(struct cache_t* cp, uint32_t index, uint32_t tag2find, char di
 
 int cache_access(struct cache_t* cp, unsigned long address, char access_type, unsigned long long now, struct cache_t* next_cp)
 {
+	int total_latency = 0;
+	
 	//	Try to get from the L1
 	uint32_t ui32_address = (uint32_t) address;
 	uint32_t cache_index = getCacheIndex(ui32_address, cache_config, 1);
@@ -198,18 +199,33 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 	//	Check hit/miss
 	int L1hit = hit_or_miss(cp, cache_index, address_tag);
 	
-	if (L1hit == 1) {
-		// update the last accession value
-		unsigned long long access_time = (unsigned long long) cycle_number;
-		printf(" -- access time: %llu\n", access_time);
-		return 0;	// FIXME: is the L1 latency actually 0?
-	} else if (L1hit == 0) {
-		// L1 miss--is there an L2?
-		if (cache_config->size_L2 != 0) {
+	if (L1hit == 1) /* L1 HIT */
+	{	
+		if (CACHEDEBUG) { printf(" -- access time: %llu\n", now); }
+		//	update access time
+		//	1. find where in the set the block resides
+		//	2. update its ts with now
+		
+		total_latency = 0;	// FIXME: is the L1 latency actually 0?
+	}
+	else if (L1hit == 0) /* L1 MISS */
+	{	
+		if (cache_config->size_L2 != 0) /* L2 exists */
+		{	/* L2 Lookup */
 			//	try the L2…
-		} else {
-			// no L2
-			// find empty slot in the set
+			/*	
+				L2hit = hit_or_miss(next_cp, address, access_type, now, NULL);
+				if(L2hit == 1) {
+					// update access time in same manner as L1
+					total_latency += next_cp->hit_latency;
+				} else {
+					// can the memory consultation be extracted to a helper function?
+				}
+			*/
+		}
+		else /* No L2 - Go to Memory */
+		{	
+			//	find an empty slot in L1 in which to place the block
 			int empty_way = -1;
 			for(int i=0; i<cp->assoc; i++) {
 				if (cp->blocks[(int) cache_index][i].valid == 0) {
@@ -227,13 +243,14 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 					}
 				}
 				// evict
-				//	what do we do other than null the entry? write back?
+				//	FIXME: write back policy?
 				cp->blocks[(int) cache_index][lru_way].tag = 0;
 				cp->blocks[(int) cache_index][lru_way].valid = 0;
 				cp->blocks[(int) cache_index][lru_way].ts = 0;
 				empty_way = lru_way;
 			}
-			//	place the block into the cache
+			
+			//	place the block into the L1
 			cp->blocks[(int) cache_index][empty_way].tag = address_tag;
 			cp->blocks[(int) cache_index][empty_way].valid = 1;
 			if(access_type == 'w') {
@@ -241,21 +258,24 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 			} else if (access_type == 'r') {
 				cp->blocks[(int) cache_index][empty_way].dirty = 0;
 			} else {
-				// problem
+				// big problem
+				total_latency = -1;
 			}
-			cp->blocks[(int) cache_index][empty_way].ts = (unsigned long long) cycle_number;
+			cp->blocks[(int) cache_index][empty_way].ts = now;
 			
+			//	FIXME: we also need to place in L2 for inclusivity
+			//	i.e. find empty slot in L2, do LRU eviction if unavailable, handle write-back
+			//	? does this affect total latency?
 			
-			
-			// return memory latency
-			return cache_config->access_time_mem;
+			// add memory access time to our total latency
+			total_latency += (cache_config->access_time_mem);
 		}
 	} else {
 		// something has gone very wrong
 		printf("an internal error has occurred.\n");
+		total_latency = -1;
 	}
-	s
-	return(cp->hit_latency);
+	return total_latency;
 }
 
 //EOF
