@@ -13,20 +13,20 @@
 
 #define CC_USEFILE 1
 
-// to keep cache statistics
-unsigned int accesses = 0;
-unsigned int read_accesses = 0;
-unsigned int write_accesses = 0;
-unsigned int L1hits = 0;
-unsigned int L1misses = 0;
-unsigned int L2hits = 0;
-unsigned int L2misses = 0;
-
-// globally-accessible cache configuration pointer
+//	globals to be updated by the likes of cache.h
 cache_config_t* cache_config;
 
-// making cycle_number globally accessible for non-colliding timestamps of memory accesses
+unsigned int accesses;
+unsigned int read_accesses;
+unsigned int write_accesses;
+unsigned int L1hits;
+unsigned int L1misses;
+unsigned int L2hits;
+unsigned int L2misses;
+
 unsigned int cycle_number;
+
+
 
 int main(int argc, char **argv)
 {
@@ -34,6 +34,14 @@ int main(int argc, char **argv)
 	size_t size;
 	char *trace_file_name;
 	int trace_view_on = 0;
+	
+	accesses = 0;
+	read_accesses = 0;
+	write_accesses = 0;
+	L1hits = 0;
+	L1misses = 0;
+	L2hits = 0;
+	L2misses = 0;
 	
 	unsigned char t_type = 0;
 	unsigned char t_sReg_a= 0;

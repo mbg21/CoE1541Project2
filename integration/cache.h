@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <limits.h>
 
 #include "CacheConfigurator.h"
 #include "AddressParser.h"
@@ -15,6 +16,14 @@
 #define CS_DEBUG 0
 
 extern cache_config_t* cache_config;
+extern unsigned int accesses;
+extern unsigned int read_accesses;
+extern unsigned int write_accesses;
+extern unsigned int L1hits;
+extern unsigned int L1misses;
+extern unsigned int L2hits;
+extern unsigned int L2misses;
+
 
 struct cache_blk_t {
 	unsigned long tag;
@@ -68,17 +77,17 @@ struct cache_t* cache_create(int size, int blocksize, int assoc, int latency) {
 	return C;
 }
 
-void print_hit_or_miss(int hit_or_miss_i, uint32_t index, int way, uint32_t cache_tag, uint32_t tag2cmp) {
+void print_hit_or_miss(char access_type, int hit_or_miss_i, uint32_t index, int way, uint32_t cache_tag, uint32_t tag2cmp) {
 	if (hit_or_miss_i == 1) {
-		printf("Hit!\tIndex:%04d\t\tWay:%02d\t\t\tTag in Cache:%08u\t\tTag to Find:%08u\t\tNumerical Value:%d\n", index, way, cache_tag, tag2cmp, hit_or_miss_i);
+		printf("Hit!  (%c)\tIndex:%04d\t\tWay:%02d\t\t\tTag in Cache:%08u\t\tTag to Find:%08u\t\tNumerical Value:%d\n", access_type, index, way, cache_tag, tag2cmp, hit_or_miss_i);
 	} else if (hit_or_miss_i == 0) {
-		printf("Miss!\tIndex:%04d\t\t-----\t\t\t--------------\t\tTag to Find:%08u\t\tNumerical Value:%d\n", index, tag2cmp, hit_or_miss_i); 
+		printf("Miss! (%c)\tIndex:%04d\t\t–––––\t\t\t––––––––––––––––––––\t\tTag to Find:%08u\t\tNumerical Value:%d\n", access_type,index, tag2cmp, hit_or_miss_i); 
 	} else {
 		printf("Neither hit or miss. This shouldn't happen.");
 	}
 }
 
-int hit_or_miss(struct cache_t* cp, uint32_t index, uint32_t tag2cmp) {
+int hit_or_miss(struct cache_t* cp, uint32_t index, uint32_t tag2cmp, char access_type) {
 	struct cache_blk_t* blocks = cp->blocks[index]; // get blocks from cache
 	struct cache_blk_t block_from_way;
 	unsigned long tag; 
@@ -96,16 +105,16 @@ int hit_or_miss(struct cache_t* cp, uint32_t index, uint32_t tag2cmp) {
 			 block_from_way = blocks[way]; // get all the blocks from that index
 			 tag = block_from_way.tag; // get tag from cache
 			// compare tags
-			if (tag == tag2cmp) { 
+			if (tag == tag2cmp && block_from_way.valid == 1) { 
 					result = 1; 
-					if(HM_DEBUG) { print_hit_or_miss(result, index, way, tag, tag2cmp ); } 
+					if(HM_DEBUG) { print_hit_or_miss(access_type, result, index, way, tag, tag2cmp); } 
 					return 1; // hit
 			} else if (tag != tag2cmp) { 
 					// go to next way
 			} else { printf("Something went wrong. Returning -1\n"); return -1;}
 		}
 		result = 0; 
-		if(HM_DEBUG) {print_hit_or_miss(result, index, tag, way, tag2cmp ); }
+		if(HM_DEBUG) {print_hit_or_miss(access_type, result, index, tag, way, tag2cmp ); }
 		return result; // we searched each way and didn't find anything...miss.
 	}
 		
@@ -121,7 +130,6 @@ void write_tag(struct cache_t* cp, uint32_t index, int assoc, uint32_t tag2write
 		//if (CS_DEBUG) { printf("Tag at (Index:%d, Way:%d) overwritten with %lu\n", index, assoc, cp->blocks[index][assoc].tag); read_tag(cp, index, assoc); }
 	}
 }
-
 
 int set_valid_bit(struct cache_t* cp, uint32_t index, uint32_t tag2find, char valid_bit) {
   
@@ -197,79 +205,153 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 	//printf("--CACHE REQUEST: address %u  ->  index: %u, tag: %u\n", ui32_address, cache_index, address_tag);
 	
 	//	Check hit/miss
-	int L1hit = hit_or_miss(cp, cache_index, address_tag);
+	int L1hit = hit_or_miss(cp, cache_index, address_tag, access_type);
 	
 	if (L1hit == 1) /* L1 HIT */
 	{	
-		if (CACHEDEBUG) { printf(" -- access time: %llu\n", now); }
 		//	update access time
 		//	1. find where in the set the block resides
-		//	2. update its ts with now
-		
+		for(int i=0; i<cp->assoc; i++) {
+			if( cp->blocks[(int) cache_index][i].tag == address_tag ) {
+				//	2. update its ts with now
+				cp->blocks[(int) cache_index][i].ts = now;
+				cp->blocks[(int) cache_index][i].dirty = ((access_type == 'w') ? 1:0);
+				if (CACHEDEBUG) printf(" -- L1 Hit (%c) @ cyle %llu for index %u, tag %u\n", access_type, now, cache_index, address_tag);
+			}
+		}
+		L1hits++;
 		total_latency = 0;	// FIXME: is the L1 latency actually 0?
 	}
 	else if (L1hit == 0) /* L1 MISS */
 	{	
-		if (cache_config->size_L2 != 0) /* L2 exists */
-		{	/* L2 Lookup */
-			//	try the L2…
-			/*	
-				L2hit = hit_or_miss(next_cp, address, access_type, now, NULL);
-				if(L2hit == 1) {
-					// update access time in same manner as L1
-					total_latency += next_cp->hit_latency;
-				} else {
-					// can the memory consultation be extracted to a helper function?
+		L1misses++;
+		if (cache_config->size_L2 != 0) /* L2 exists -- do lookup */
+		{
+			int L2hit = hit_or_miss(next_cp, cache_index, address_tag, access_type);
+			if(L2hit == 1) {
+				if (CACHEDEBUG) { printf(" -- L2 hit\n"); }
+				L2hits++;
+				
+				//	find where it is in L2
+				int a_index = -1;
+				for(int i=0; i<next_cp->assoc; i++)
+				{
+					if (next_cp->blocks[(int) cache_index][i].tag == address_tag)
+					{
+						a_index = i;
+						break;
+					}
 				}
-			*/
+				if (a_index != -1)
+				{
+					// 	update it
+					next_cp->blocks[(int) cache_index][a_index].ts = now;
+					next_cp->blocks[(int) cache_index][a_index].dirty = (access_type == 'w' ? 1:0);
+					next_cp->blocks[(int) cache_index][a_index].tag = address_tag;
+			
+					//	find space for it in L1
+					int l1aindex = -1;
+					for(int i=0; i<cp->assoc; i++)
+					{
+						if (cp->blocks[(int) cache_index][i].valid == 0) 
+						{
+							l1aindex = i;
+							break;
+						}
+					}
+					if (l1aindex == -1) {
+						//	if none exists, evict LRU
+						int lruindex = -1;
+						int lrucycle = INT_MAX;
+						for(int i=0; i<cp->assoc; i++)
+						{
+							if (cp->blocks[(int) cache_index][i].ts < lrucycle)
+							{
+								lrucycle = cp->blocks[(int) cache_index][i].ts;
+								lruindex = i;
+							}
+						}
+						//	if LRU is dirty, write back (to L2)
+						//	write policy?
+						
+					}
+					
+				
+				
+					//	place in L1
+				} else {
+					// big problem
+				}
+				
+				
+				
+				
+				
+				total_latency += next_cp->hit_latency;
+			} else {
+				// can the memory consultation be extracted to a helper function?
+				if (CACHEDEBUG) { printf(" -- L2 miss\n"); }
+				L2misses++;
+				total_latency += (cache_config->access_time_mem) + (next_cp->hit_latency);
+			}
+				
+				
+				
 		}
 		else /* No L2 - Go to Memory */
 		{	
-			//	find an empty slot in L1 in which to place the block
-			int empty_way = -1;
-			for(int i=0; i<cp->assoc; i++) {
+			int wayindex = -1;
+			// see if there's an open spot in L1
+			for(int i = 0; i<cp->assoc; i++)
+			{
 				if (cp->blocks[(int) cache_index][i].valid == 0) {
-					empty_way = i;
+					wayindex = i;
 					break;
 				}
 			}
-			// if no emtpy slot, evict LRU
-			if (empty_way == -1) {
-				// LRU eviction
-				int lru_way = 0;
-				for(int i = 0; i < cp->assoc; i++) {
-					if ( cp->blocks[(int) cache_index][i].ts < cp->blocks[(int) cache_index][lru_way].ts ) {
-						lru_way = i;
+			// if not, find the LRU block
+			if (wayindex == -1) {
+				int LRUindex = -1;
+				int LRUcycle = INT_MAX;
+				for(int i=0; i<cp->assoc; i++)
+				{
+					if (cp->blocks[(int) cache_index][i].ts < LRUcycle)
+					{
+						LRUcycle = cp->blocks[(int) cache_index][i].ts;
+						LRUindex = i;
 					}
 				}
-				// evict
-				//	FIXME: write back policy?
-				cp->blocks[(int) cache_index][lru_way].tag = 0;
-				cp->blocks[(int) cache_index][lru_way].valid = 0;
-				cp->blocks[(int) cache_index][lru_way].ts = 0;
-				empty_way = lru_way;
+				if (LRUindex == -1 || LRUcycle == INT_MAX) { printf("something has gone horribly wrong finding the LRU block\n"); return -1; }
+				if (CACHEDEBUG) { printf(" -- cyle %llu : @index %u evicted block with tag %lu\n", now, cache_index, cp->blocks[(int) cache_index][LRUindex].tag); }
+				// check if LRU block is dirty
+				if (cp->blocks[(int) cache_index][LRUindex].dirty == 1)
+				{
+					// write back to L2 if available, memory otherwise
+					// are there time penalties for these scenarios?
+				}
+				cp->blocks[(int) cache_index][LRUindex].valid = 1;
+				cp->blocks[(int) cache_index][LRUindex].tag = address_tag;
+				cp->blocks[(int) cache_index][LRUindex].dirty = (access_type == 'w' ? 1:0);
+				cp->blocks[(int) cache_index][LRUindex].ts = now;
 			}
-			
-			//	place the block into the L1
-			cp->blocks[(int) cache_index][empty_way].tag = address_tag;
-			cp->blocks[(int) cache_index][empty_way].valid = 1;
-			if(access_type == 'w') {
-				cp->blocks[(int) cache_index][empty_way].dirty = 1;
-			} else if (access_type == 'r') {
-				cp->blocks[(int) cache_index][empty_way].dirty = 0;
-			} else {
-				// big problem
-				total_latency = -1;
+			else
+			{
+				// otherwise write to the open spot
+				cp->blocks[(int) cache_index][wayindex].valid = 1;
+				cp->blocks[(int) cache_index][wayindex].tag = address_tag;
+				cp->blocks[(int) cache_index][wayindex].dirty = (access_type == 'w' ? 1:0);
+				cp->blocks[(int) cache_index][wayindex].ts = now;
 			}
-			cp->blocks[(int) cache_index][empty_way].ts = now;
-			
-			//	FIXME: we also need to place in L2 for inclusivity
-			//	i.e. find empty slot in L2, do LRU eviction if unavailable, handle write-back
-			//	? does this affect total latency?
-			
-			// add memory access time to our total latency
-			total_latency += (cache_config->access_time_mem);
+			total_latency += (cache_config->access_time_mem);	
 		}
+		
+
+		//	FIXME: we also need to place in L2 for inclusivity
+		//	i.e. find empty slot in L2, do LRU eviction if unavailable, handle write-back
+		//	? does this affect total latency?
+		
+		// add memory access time to our total latency
+			
 	} else {
 		// something has gone very wrong
 		printf("an internal error has occurred.\n");
