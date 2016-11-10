@@ -171,7 +171,22 @@ int set_dirty_bit(struct cache_t* cp, uint32_t index, uint32_t tag2find, char di
 }
 
 
-//	this will need to read the external global
+
+// Based on address, determine the set to access in cp and examine the blocks
+// in the set to check hit/miss and update the golbal hit/miss statistics
+// If a miss, determine the victim in the set to replace (LRU). Replacement for 
+// L2 blocks should observe the inclusion property.
+//
+// The function should return the hit_latency in case of a hit. In case
+// of a miss, you need to figure out a way to return the time it takes to service 
+// the request, which includes writing back the replaced block, if dirty, and bringing 
+// the requested block from the lower level (from L2 in case of L1, and from memory in case of L2).
+// This will require one or two calls to cache_access(L2, ...) for misses in L1.
+// It is recommended to start implementing and testing a system with only L1 (no L2). Then add the
+// complexity of an L2.
+
+//	NEED A FLOWCHART FOR L1 H/M R/W; L2 H/M R/W…
+
 int cache_access(struct cache_t* cp, unsigned long address, char access_type, unsigned long long now, struct cache_t* next_cp)
 {
 	//	Try to get from the L1
@@ -187,6 +202,7 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 		// update the last accession value
 		unsigned long long access_time = (unsigned long long) cycle_number;
 		printf(" -- access time: %llu\n", access_time);
+		return 0;	// FIXME: is the L1 latency actually 0?
 	} else if (L1hit == 0) {
 		// L1 miss--is there an L2?
 		if (cache_config->size_L2 != 0) {
@@ -238,7 +254,7 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 		// something has gone very wrong
 		printf("an internal error has occurred.\n");
 	}
-	
+	s
 	return(cp->hit_latency);
 }
 
