@@ -13,7 +13,7 @@
 
 #define CACHEDEBUG 1
 #define HM_DEBUG 1
-#define CS_DEBUG 0
+#define CS_DEBUG 1
 
 extern cache_config_t* cache_config;
 extern unsigned int accesses;
@@ -194,23 +194,111 @@ int set_dirty_bit(struct cache_t* cp, uint32_t index, uint32_t tag2find, char di
 
 //	NEED A FLOWCHART FOR L1 H/M R/W; L2 H/M R/W…
 
-int cache_access(struct cache_t* cp, unsigned long address, char access_type, unsigned long long now, struct cache_t* next_cp)
-{
+int findOpenBlockAtIndex(struct cache_t* cp, int index) {
+	int a = -1;
+	for(int i=0; i<cp->assoc; i++) {
+		if (cp->blocks[index][i].valid == 0) {
+			a = i;
+			break;
+		}
+	}
+	return a;
+}
+
+int evictLRUblockAtIndex(struct cache_t* cp, uint32_t ui32_address, int index, struct cache_t* next_cp) {
+	int lru_aindex = -1;
+	unsigned long long lru_ts_min = ULLONG_MAX;
+	for (int i=0; i<cp->assoc; i++) {
+		if ((cp->blocks[index][i].ts < lru_ts_min) && (cp->blocks[index][i].valid == 1)) {
+			lru_ts_min = cp->blocks[index][i].ts;
+			lru_aindex = i;
+		}
+	}
+	
+	// case 1: evict from L1, no L2
+	if (cache_config->size_L2 == 0) {
+		cp->blocks[index][lru_aindex].valid = 0;
+		cp->blocks[index][lru_aindex].tag = 0;
+		cp->blocks[index][lru_aindex].dirty = 0;
+		cp->blocks[index][lru_aindex].ts = 0;
+	}
+	else if (cache_config->size_L2 != 0 && next_cp != NULL) {
+		// case 2: evict from L1, have L2
+		printf("evicting from L1 to L2\n");
+		int l2cache_index = getCacheIndex(ui32_address, cache_config, 2);
+		uint32_t l2address_tag = getCacheTag(ui32_address, cache_config, 2);
+		
+		int l2_aindex = findOpenBlockAtIndex(next_cp, l2cache_index);
+		if (l2_aindex == -1) {
+			// need to LRU evict on L2
+			l2_aindex = evictLRUblockAtIndex(next_cp, ui32_address, l2cache_index, NULL);
+		}
+		// transfer to L2
+		//next_cp->blocks[l2cache_index][l2_aindex].tag = l2address_tag;
+		//next_cp->blocks[l2cache_index][l2_aindex].valid = 1;
+		//next_cp->blocks[l2cache_index][l2_aindex].ts = cp->blocks[index][lru_aindex].ts;
+		next_cp->blocks[l2cache_index][l2_aindex].dirty = cp->blocks[index][lru_aindex].dirty;
+		
+		//	clear L1 entry
+		cp->blocks[index][lru_aindex].valid = 0;
+		cp->blocks[index][lru_aindex].tag = 0;
+		cp->blocks[index][lru_aindex].dirty = 0;
+		cp->blocks[index][lru_aindex].ts = 0;
+	}
+	else if (cache_config->size_L2 != 0 && next_cp == NULL) {
+		// case 3: evict LRU from L2
+		printf("evicting from L2\n");
+		int l2cache_index = getCacheIndex(ui32_address, cache_config, 2);
+		
+		int lru_aindex = -1;
+		unsigned long long lru_ts_min = ULLONG_MAX;
+		for (int i=0; i<cp->assoc; i++) {
+			if ((cp->blocks[index][i].ts < lru_ts_min) && (cp->blocks[index][i].valid == 1)) {
+				lru_ts_min = cp->blocks[index][i].ts;
+				lru_aindex = i;
+			}
+		}
+		
+		if (lru_aindex != -1) {
+			cp->blocks[l2cache_index][lru_aindex].tag = 0;
+			cp->blocks[l2cache_index][lru_aindex].valid = 0;
+			cp->blocks[l2cache_index][lru_aindex].ts = 0;
+			cp->blocks[l2cache_index][lru_aindex].dirty = 0;
+		}
+		else {
+			printf("could not locate eviction target in L2\n");
+		}
+	}
+	else {
+		printf("LRU eviction encountered an error.\n");
+	}
+	// return associativity index of evicted block
+	//printf("evicted LRU block of L? at index %i, a_index %i\n", index, lru_aindex);
+	return lru_aindex;
+}
+
+int cache_access(struct cache_t* cp, unsigned long address, char access_type, unsigned long long now, struct cache_t* next_cp) {
 	int total_latency = 0;
 	
-	//	Try to get from the L1
 	uint32_t ui32_address = (uint32_t) address;
+	
 	int l1cache_index = getCacheIndex(ui32_address, cache_config, 1);
 	uint32_t l1address_tag = getCacheTag(ui32_address, cache_config, 1);
-	//printf("--CACHE REQUEST: address %u  ->  index: %u, tag: %u\n", ui32_address, l1cache_index, l1address_tag);
-	int l2cache_index = (int) getCacheIndex(ui32_address, cache_config, 2);
-	uint32_t l2address_tag = (int) getCacheTag(ui32_address, cache_config, 2);
 	
+	int l2cache_index = -1;
+	uint32_t l2address_tag = 0;
+	if (next_cp != NULL) {
+		l2cache_index = getCacheIndex(ui32_address, cache_config, 2);
+		l2address_tag = getCacheTag(ui32_address, cache_config, 2);
+	}
+	
+	if (CACHEDEBUG > 1) printf("–address %u -> L1i %i, L1t %u, L2i %i, L2t %u\n", ui32_address, l1cache_index, l1address_tag, l2cache_index, l2address_tag);
+	
+	printf("L1:");
 	//	Check hit/miss
 	int L1hit = hit_or_miss(cp, l1cache_index, l1address_tag, access_type);
 	
-	if (L1hit == 1) /* L1 HIT */
-	{	
+	if (L1hit == 1) {	
 		//	update access time
 		//	1. find where in the set the block resides
 		for(int i=0; i<cp->assoc; i++) {
@@ -218,189 +306,97 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 				//	2. update its ts with now
 				cp->blocks[l1cache_index][i].ts = now;
 				cp->blocks[l1cache_index][i].dirty = ((access_type == 'w') ? 1:0);
-				if (CACHEDEBUG) printf(" -- L1 Hit (%c) @ cyle %llu for index %u, tag %u\n", access_type, now, l1cache_index, l1address_tag);
+				if (CACHEDEBUG > 1) printf(" -- L1 Hit (%c) @ cyle %llu for index %u, tag %u\n", access_type, now, l1cache_index, l1address_tag);
 			}
 		}
 		L1hits++;
-		total_latency = 0;	// FIXME: is the L1 latency actually 0?
-	}
-	else if (L1hit == 0) /* L1 MISS */
-	{	
-		printf(" -- L1 miss\n");
+		total_latency = 0;
+	}//end-if-L1hit
+	else if (L1hit == 0) {	
 		L1misses++;
-		if (cache_config->size_L2 != 0) /* L2 exists -- do lookup */
-		{
+		if (CACHEDEBUG > 1) printf(" -- L1 Miss\n");
+		
+		if (cache_config->size_L2 == 0) {
+			// No L2, go to memory
+			// nothing to fetch, just create the entry in L1
+			int assoc_index = findOpenBlockAtIndex(cp, l1cache_index);
+			
+			// if no open spot, LRU eviction
+			if (assoc_index == -1) {
+				assoc_index = evictLRUblockAtIndex(cp, ui32_address, l1cache_index, NULL);
+				if (CACHEDEBUG) printf(" -- No open L1 spots, evicting from L1index %i at a_index %i\n", l1cache_index, assoc_index);
+			}
+			
+			// cache the block in the L1
+			cp->blocks[l1cache_index][assoc_index].valid = 1;
+			cp->blocks[l1cache_index][assoc_index].tag = l1address_tag;
+			cp->blocks[l1cache_index][assoc_index].dirty = 0;
+			cp->blocks[l1cache_index][assoc_index].ts = now;
+			
+			// increment the latency by the memory access latency
+			total_latency += cache_config->access_time_mem;
+		}//end-if-l1miss-noL2
+		else {
+			//	start into the L2
+			printf(" -- searching L2: L2index %i tag %i\n", l2cache_index, l2address_tag);
+			
+			printf("L2:");
+			// Check hit/miss
 			int L2hit = hit_or_miss(next_cp, l2cache_index, l2address_tag, access_type);
 			
-			printf(" -- L2 hit = %i\n", L2hit);
-			
-			if(L2hit == 1) {
-				if (CACHEDEBUG) { printf(" -- L2 hit\n"); }
+			if (L2hit == 1) {
 				L2hits++;
 				
-				//	find where it is in L2
-				int a_index = -1;
-				for(int i=0; i<next_cp->assoc; i++)
-				{
-					if (next_cp->blocks[l2cache_index][i].tag == l1address_tag)
-					{
-						a_index = i;
-						break;
-					}
-				}
-				if (a_index != -1)
-				{
-					// 	update it
-					next_cp->blocks[l2cache_index][a_index].ts = now;
-					next_cp->blocks[l2cache_index][a_index].dirty = (access_type == 'w' ? 1:0);
-					next_cp->blocks[l2cache_index][a_index].tag = l1address_tag;
-			
-					//	find space for it in L1
-					int l1aindex = -1;
-					for(int i=0; i<cp->assoc; i++)
-					{
-						if (cp->blocks[l1cache_index][i].valid == 0) 
-						{
-							l1aindex = i;
-							break;
-						}
-					}
-					if (l1aindex == -1) {
-						//	if none exists, evict LRU
-						int lruindex = -1;
-						int lrucycle = INT_MAX;
-						for(int i=0; i<cp->assoc; i++)
-						{
-							if (cp->blocks[l1cache_index][i].ts < lrucycle)
-							{
-								lrucycle = cp->blocks[l1cache_index][i].ts;
-								lruindex = i;
-							}
-						}
-						//	if LRU is dirty, write back (to L2)
-						if (cp->blocks[l1cache_index][lruindex].dirty == 1){
-						
-							//update access time and dirty bit to L1 dirty
-							next_cp->blocks[l2cache_index][lruindex].ts = cp->blocks[l1cache_index][lruindex].ts;
-							next_cp->blocks[l2cache_index][lruindex].dirty = 1; 	
-						}
-								
-						//	place in L1
-						cp->blocks[l1cache_index][lruindex].tag = l1address_tag; 	
-					}
-					
-				} else {
-					// big problem
-				}
+				if (CACHEDEBUG) printf(" -- L2 Hit\n");
 				
+				// bring from L2 into L1, first ensure space for it in L1
+				int l1_aindex = findOpenBlockAtIndex(cp, l1cache_index);
+				if (l1_aindex == -1) {
+					l1_aindex = evictLRUblockAtIndex(cp, ui32_address, l1cache_index, next_cp);
+				}
+				cp->blocks[l1cache_index][l1_aindex].tag = l1address_tag;
+				cp->blocks[l1cache_index][l1_aindex].ts = now;
+				cp->blocks[l1cache_index][l1_aindex].dirty = ((access_type == 'w') ? 1:0);
+				cp->blocks[l1cache_index][l1_aindex].valid = 1;
 				
-				total_latency += next_cp->hit_latency;
-			} else {
-				// can the memory consultation be extracted to a helper function?
-				if (CACHEDEBUG) { printf(" -- L2 miss\n"); }
+				total_latency += cache_config->access_time_L2;
+			}//end-if-L2hit
+			else {
 				L2misses++;
 				
-				int l2aindex = -1; 
-				for (int i = 0; i < (next_cp->assoc); i++){
-					
-					if (next_cp->blocks[l2cache_index][i].valid == 0){
-						l2aindex = i; 
-						break; 
-					}
-				}
-					
-				if (l2aindex ==  -1){
-					// if no free space, find and evict LRU
-					int lruindex = -1; 
-					int lrucycle = INT_MAX; 
-						
-					for (int i = 0; i < next_cp->assoc; i++){
-						if (next_cp->blocks[l2cache_index][i].ts < lrucycle){
-							lrucycle = next_cp->blocks[l2cache_index][i].ts; 
-							lruindex = i; 
-						}	
-					}
-					
-					if (next_cp->blocks[l2cache_index][lruindex].dirty == 1){
-						// write back to memory, but nothing to do...
-						
-						
-					}
-					
-					//not dirty... overwrite
-					next_cp->blocks[l2cache_index][lruindex].tag = l1address_tag; 
-					next_cp->blocks[l2cache_index][lruindex].ts = now; 
-					next_cp->blocks[l2cache_index][lruindex].dirty = ((access_type == 'w') ? 1 : 0);		
-				}else{
-					next_cp->blocks[l2cache_index][l2aindex].tag = l1address_tag; 
-					next_cp->blocks[l2cache_index][l2aindex].ts = now; 
-					next_cp->blocks[l2cache_index][l2aindex].dirty = ((access_type == 'w') ? 1 : 0);
-				}
+				if (CACHEDEBUG) printf(" -- L2 Miss\n");
 				
-				total_latency += (cache_config->access_time_mem) + (next_cp->hit_latency);
-			}
-					
-		}else /* No L2 - Go to Memory */
-		{	
-			if (CACHEDEBUG) printf(" -- no L2, go to memory\n");
-			
-			int wayindex = -1;
-			// see if there's an open spot in L1
-			for(int i = 0; i<cp->assoc; i++)
-			{
-				if (cp->blocks[l1cache_index][i].valid == 0) {
-					wayindex = i;
-					break;
+				// go to memory
+				
+				// put in L2
+				//	find open spot
+				int l2aindex = findOpenBlockAtIndex(next_cp, l2cache_index);
+				if (l2aindex == -1) {
+					l2aindex = evictLRUblockAtIndex(next_cp, ui32_address, l2cache_index, NULL);
+					if (CACHEDEBUG) printf(" -- No open L2 spots, evicting from L2index %i at a_index %i\n", l2cache_index, l2aindex);
 				}
-			}
-			// if not, find the LRU block
-			if (wayindex == -1) {
-				int LRUindex = -1;
-				int LRUcycle = INT_MAX;
-				for(int i=0; i<cp->assoc; i++)
-				{
-					if (cp->blocks[l1cache_index][i].ts < LRUcycle)
-					{
-						LRUcycle = cp->blocks[l1cache_index][i].ts;
-						LRUindex = i;
-					}
+				next_cp->blocks[l2cache_index][l2aindex].tag = l2address_tag;
+				next_cp->blocks[l2cache_index][l2aindex].valid = 1;
+				next_cp->blocks[l2cache_index][l2aindex].dirty = 0;				// L1 will record if dirty, L2 will reflect memory until then
+				next_cp->blocks[l2cache_index][l2aindex].ts = now;
+				printf(" -- cached in L2: L2index %i, tag: %i\n", l2cache_index, l2address_tag);
+				
+				// put in L1
+				//	find open spot
+				int l1aindex = findOpenBlockAtIndex(cp, l1cache_index);
+				if (l1aindex == -1) {
+					l1aindex = evictLRUblockAtIndex(cp, ui32_address, l1cache_index, next_cp);
+					if (CACHEDEBUG) printf(" -- No open L1 spots, evicting from L1index %i at a_index %i\n", l1cache_index, l1aindex);
 				}
-				if (LRUindex == -1 || LRUcycle == INT_MAX) { printf("something has gone horribly wrong finding the LRU block\n"); return -1; }
-				if (CACHEDEBUG) { printf(" -- cyle %llu : @index %u evicted block with tag %lu\n", now, l1cache_index, cp->blocks[l1cache_index][LRUindex].tag); }
-				// check if LRU block is dirty
-				if (cp->blocks[l1cache_index][LRUindex].dirty == 1)
-				{
-					// write back to L2 if available, memory otherwise
-					// are there time penalties for these scenarios?
-				}
-				cp->blocks[l1cache_index][LRUindex].valid = 1;
-				cp->blocks[l1cache_index][LRUindex].tag = l1address_tag;
-				cp->blocks[l1cache_index][LRUindex].dirty = (access_type == 'w' ? 1:0);
-				cp->blocks[l1cache_index][LRUindex].ts = now;
-			}
-			else
-			{
-				// otherwise write to the open spot
-				cp->blocks[l1cache_index][wayindex].valid = 1;
-				cp->blocks[l1cache_index][wayindex].tag = l1address_tag;
-				cp->blocks[l1cache_index][wayindex].dirty = (access_type == 'w' ? 1:0);
-				cp->blocks[l1cache_index][wayindex].ts = now;
-			}
-			total_latency += (cache_config->access_time_mem);	
-		}
-		
-
-		//	FIXME: we also need to place in L2 for inclusivity
-		//	i.e. find empty slot in L2, do LRU eviction if unavailable, handle write-back
-		//	? does this affect total latency?
-		
-		// add memory access time to our total latency
-			
-	} else {
-		// something has gone very wrong
-		printf("an internal error has occurred.\n");
-		total_latency = -1;
-	}
+				cp->blocks[l1cache_index][l1aindex].tag = l1address_tag;
+				cp->blocks[l1cache_index][l1aindex].valid = 1;
+				cp->blocks[l1cache_index][l1aindex].dirty = ((access_type == 'w') ? 1:0);
+				cp->blocks[l1cache_index][l1aindex].ts = now;
+				
+				total_latency += (cache_config->access_time_mem) + (cache_config->access_time_L2);
+			}//end-elif-L2miss
+		}//end-elif-l1miss-haveL2
+	}//end-elif-l1miss
 	return total_latency;
 }
 

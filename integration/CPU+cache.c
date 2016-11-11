@@ -12,6 +12,7 @@
 #include "AddressParser.h"
 
 #define CC_USEFILE 1
+#define CC_SETUPDEBUG 1
 
 //	globals to be updated by the likes of cache.h
 cache_config_t* cache_config;
@@ -108,6 +109,11 @@ int main(int argc, char **argv)
 		L2 = cache_create(L2size, bsize, L2assoc, L2_hit_latency);
 		nextL = L2;
 	}
+	
+	if (CC_SETUPDEBUG) {
+		printf("L1: size = %03i KiB, assoc = %i, blocksize = %i\n", L1size, L1assoc, bsize);
+		printf("L2: size = %03i KiB, assoc = %i\n", L2size, L2assoc);
+	}
 
 	while(1) {
 		size = trace_get_item(&tr_entry);
@@ -196,6 +202,15 @@ int main(int argc, char **argv)
 		}//end-switch
 		
 	}//end-while
+	
+	//	print stats
+	printf("all accesses: %u\n", accesses);
+	printf("  R accesses: %u\n", read_accesses);
+	printf("  W accesses: %u\n", write_accesses);
+	printf("     L1 hits: %u\n", L1hits);
+	printf("   L1 misses: %u\n", L1misses);
+	printf("     L2 hits: %u\n", L2hits);
+	printf("   L2 misses: %u\n", L2misses);
 
 	trace_uninit();
 	free(cache_config);
