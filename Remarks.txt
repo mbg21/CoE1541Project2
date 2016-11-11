@@ -1,0 +1,4 @@
+Remarks
+
+CAVEAT: We were unable to construct a perfectl-behaved L2 scheme. Despite, or perhaps because, we constructed the L2 scheme to operate by the same logic as the L1, when implemented, every L1 miss was also an L2 miss. We were able to diagnose correct loading into L2 on a miss, but encountered erroneous eviction behavior despite being given (apparent) correct logic to control eviction.
+

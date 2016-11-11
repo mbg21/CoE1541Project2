@@ -11,9 +11,9 @@
 #include "CacheConfigurator.h"
 #include "AddressParser.h"
 
-#define CACHEDEBUG 1
-#define HM_DEBUG 1
-#define CS_DEBUG 1
+#define CACHEDEBUG 0
+#define HM_DEBUG 0
+#define CS_DEBUG 0
 
 extern cache_config_t* cache_config;
 extern unsigned int accesses;
@@ -224,7 +224,7 @@ int evictLRUblockAtIndex(struct cache_t* cp, uint32_t ui32_address, int index, s
 	}
 	else if (cache_config->size_L2 != 0 && next_cp != NULL) {
 		// case 2: evict from L1, have L2
-		printf("evicting from L1 to L2\n");
+		//printf("evicting from L1 to L2\n");
 		int l2cache_index = getCacheIndex(ui32_address, cache_config, 2);
 		uint32_t l2address_tag = getCacheTag(ui32_address, cache_config, 2);
 		
@@ -247,7 +247,7 @@ int evictLRUblockAtIndex(struct cache_t* cp, uint32_t ui32_address, int index, s
 	}
 	else if (cache_config->size_L2 != 0 && next_cp == NULL) {
 		// case 3: evict LRU from L2
-		printf("evicting from L2\n");
+		//printf("evicting from L2\n");
 		int l2cache_index = getCacheIndex(ui32_address, cache_config, 2);
 		
 		int lru_aindex = -1;
@@ -266,11 +266,11 @@ int evictLRUblockAtIndex(struct cache_t* cp, uint32_t ui32_address, int index, s
 			cp->blocks[l2cache_index][lru_aindex].dirty = 0;
 		}
 		else {
-			printf("could not locate eviction target in L2\n");
+			//printf("could not locate eviction target in L2\n");
 		}
 	}
 	else {
-		printf("LRU eviction encountered an error.\n");
+		//printf("LRU eviction encountered an error.\n");
 	}
 	// return associativity index of evicted block
 	//printf("evicted LRU block of L? at index %i, a_index %i\n", index, lru_aindex);
@@ -294,7 +294,7 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 	
 	if (CACHEDEBUG > 1) printf("–address %u -> L1i %i, L1t %u, L2i %i, L2t %u\n", ui32_address, l1cache_index, l1address_tag, l2cache_index, l2address_tag);
 	
-	printf("L1:");
+	//printf("L1:");
 	//	Check hit/miss
 	int L1hit = hit_or_miss(cp, l1cache_index, l1address_tag, access_type);
 	
@@ -338,9 +338,9 @@ int cache_access(struct cache_t* cp, unsigned long address, char access_type, un
 		}//end-if-l1miss-noL2
 		else {
 			//	start into the L2
-			printf(" -- searching L2: L2index %i tag %i\n", l2cache_index, l2address_tag);
+			//printf(" -- searching L2: L2index %i tag %i\n", l2cache_index, l2address_tag);
 			
-			printf("L2:");
+			//printf("L2:");
 			// Check hit/miss
 			int L2hit = hit_or_miss(next_cp, l2cache_index, l2address_tag, access_type);
 			

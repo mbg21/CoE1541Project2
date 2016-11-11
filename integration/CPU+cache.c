@@ -12,7 +12,7 @@
 #include "AddressParser.h"
 
 #define CC_USEFILE 1
-#define CC_SETUPDEBUG 1
+#define CC_SETUPDEBUG 0
 
 //	globals to be updated by the likes of cache.h
 cache_config_t* cache_config;

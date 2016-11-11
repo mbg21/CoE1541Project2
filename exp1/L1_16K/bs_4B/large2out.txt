@@ -1,0 +1,11 @@
+
+ ** opening file ../../traces/sample_large2.tr
++ Simulation terminates at cycle : 2232268389
++ Cache statistics 
+all accesses: 36084985
+  R accesses: 29411338
+  W accesses: 6673647
+     L1 hits: 14699029
+   L1 misses: 21385956
+     L2 hits: 0
+   L2 misses: 0
